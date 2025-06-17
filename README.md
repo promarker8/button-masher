@@ -1,2 +1,0 @@
-# button-masher
-games hub
