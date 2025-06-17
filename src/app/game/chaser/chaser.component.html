@@ -1,0 +1,18 @@
+<div style="padding-top: 30px;">
+    <div class="game-wrapper position-relative">
+        <div #gameContainer></div>
+
+        <button *ngIf="!gameOver" class="pause-btn btn btn-warning btn-sm position-absolute top-0 end-0 m-2"
+            (click)="togglePause()">
+            ⏸ Pause
+        </button>
+
+        <div *ngIf="gameOver" class="overlay d-flex flex-column justify-content-center align-items-center">
+            <div class="game-over-score mb-3">
+                <p>Game Over! </p>
+                <p>Coins Collected: {{ finalScore }}</p>
+            </div>
+            <button class="btn btn-success btn-lg" (click)="restartGame()">▶ Play Again</button>
+        </div>
+    </div>
+</div>

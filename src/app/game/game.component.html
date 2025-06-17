@@ -1,0 +1,41 @@
+<!-- Toggle Button -->
+<div [ngClass]="getSidebarClasses()">
+    <button *ngIf="isCollapsed" class="navBtn btn btn-outline-dark" (click)="toggleSidebar()" aria-label="Toggle menu">
+        <i class="bi bi-list"></i>
+    </button>
+</div>
+
+<!-- Sidenav -->
+<nav class="sidebar text-white p-3" [ngClass]="getSidebarClasses()">
+    <div class="d-flex justify-content-end">
+        <button class="navBtnInBar btn btn-outline-light mb-3" (click)="toggleSidebar()" aria-label="Toggle menu">
+            <i class="bi bi-arrow-left"></i>
+        </button>
+    </div>
+
+    <ul class="nav nav-pills flex-column mb-auto gap-3 mt-3">
+        <li class="nav-item mb-2">
+            <a routerLink="/game" class="nav-link text-white" routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">
+                <i class="bi bi-house-fill"></i> Main Menu
+            </a>
+        </li>
+        <li class="nav-item">
+            <a routerLink="/game/chaser" class="nav-link text-white" routerLinkActive="active" (click)="closeSidebar()">
+                <i class="bi bi-person-walking"></i> Chaser
+            </a>
+        </li>
+        <li class="nav-item">
+            <a routerLink="/game/higher-lower" class="nav-link text-white" routerLinkActive="active"
+                (click)="closeSidebar()">
+                <i class="bi bi-suit-spade-fill"></i> Higher or Lower
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="backdrop" *ngIf="!isCollapsed" (click)="closeSidebar()"></div>
+
+<main class="main-content h-100">
+    <router-outlet></router-outlet>
+</main>

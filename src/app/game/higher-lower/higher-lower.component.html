@@ -1,0 +1,61 @@
+<div id="banner" class="pt-1 pb-0 text-center sticky-top mt-4">
+    <h1 class="display-4 fw-bold">Higher or Lower</h1>
+    <p class="lead">Predict if the next card flips higher or lower — every guess could make or break your streak.</p>
+</div>
+
+<div class="game-container">
+
+    <div class="streak-flash">
+        <span class="flash-text" [class.visible]="showStreakEffect">
+            🔥 {{ streak }} in a row 🔥
+        </span>
+        <span class="flash-text" [class.visible]="showLostStreakEffect">
+            ☠️ Streak lost ☠️
+        </span>
+    </div>
+
+    <div class="card-wrapper mt-2" [class.flipped]="flipped">
+        <div class="card-inner">
+            <div class="card-front">
+                <img [src]="currentCard?.image" [alt]="currentCard?.code" class="card-img" />
+            </div>
+            <div class="card-back">
+                <img [src]="backImageUrl || 'card-backs/1.png'" class="card-back-img" alt="Card back" />
+            </div>
+        </div>
+    </div>
+
+    <div class="buttons mt-4" *ngIf="!gameOn">
+        <button id="start-button" class="btn btn-large fs-4" (click)="startGame();">
+            {{ previousScore ? "Play Again" : "Let's Play" }}
+        </button>
+    </div>
+
+    <div *ngIf="gameOn">
+        <p>{{ currentCard.value }} of {{ currentCard.suit }}</p>
+        <div class="buttons" *ngIf="currentCard">
+            <button id="higher" (click)="guess('higher')" [disabled]="isBusy">Higher</button>
+            <button id="lower" class="fw-bold" (click)="guess('lower')" [disabled]="isBusy">Lower</button>
+        </div>
+    </div>
+
+    <div class="mt-2" *ngIf="gameOn">
+        <div class="score-container" [class.pulsing]="isPulsing" [class.wrong-answer]="wrongGuessAnim">
+            Score: {{ score }}
+            <div *ngIf="scorePopup" class="score-popup">{{ scorePopup }}</div>
+        </div>
+    </div>
+
+
+    <div *ngIf="!gameOn && previousScore > 0" class="game-over-message mt-2">
+        <p class="lead mb-2">Game Over</p>
+        <p class="lead">Final Score: {{ previousScore }}</p>
+    </div>
+
+</div>
+
+<div *ngIf="gameOn" class="buttons">
+    <button id="end-game-btn" class="btn" (click)="endGame()">
+        End Game
+    </button>
+</div>

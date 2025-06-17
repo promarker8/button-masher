@@ -1,0 +1,135 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    /* background-color: #121213; */
+    z-index: 1051;
+    transform: translateX(0);
+    transition: transform 0.4s ease;
+}
+
+.landing {
+    background-color: transparent;
+}
+
+.chaser:not(button) {
+    background-color: #14061f;
+}
+
+.hilo:not(button) {
+    background-color: #1b0101;
+}
+
+.default {
+    background-color: transparent;
+}
+
+.sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+.sidebar-slow-open {
+    transition: all 1s ease !important;
+}
+
+/* .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(78, 78, 79, 0.174);
+    z-index: 1050;
+} */
+
+.nav-link {
+    padding: 0.75rem;
+    transition: background 0.2s;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+nav {
+    transition: all 0.3s ease;
+    z-index: 1051;
+}
+
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navBtn {
+    position: fixed;
+    top: .6rem;
+    left: .6rem;
+    z-index: 1060;
+    align-self: flex-start;
+    height: auto;
+    font-weight: bold;
+    border: none;
+    font-size: 2rem;
+    padding: 10px;
+}
+
+.default .navBtn:hover {
+    background-color: rgb(179, 0, 0);
+}
+
+.chaser .navBtn:hover {
+    background-color: #14061f;
+}
+
+.hilo .navBtn:hover {
+    background-color: #1b0101;
+}
+
+.navBtn i {
+    display: flex;
+}
+
+.navBtnInBar {
+    align-self: flex-start;
+    height: auto;
+    font-weight: bold;
+    border: none;
+    font-size: 2rem;
+    padding: 10px;
+    transition: 200ms ease;
+}
+
+.navBtnInBar:hover {
+    background-color: inherit;
+    color: inherit;
+    /* transform: scale(1.3); */
+    transform: translateX(-20%);
+}
+
+.navBtnInBar i {
+    display: flex;
+}
+
+nav i:not(.navBtnInBar i) {
+    color: rgb(213, 0, 0) !important;
+}
+
+.nav-highlight {
+    animation: pulseOutline 1s ease-in-out 3;
+}
+
+@keyframes pulseOutline {
+    0% {
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+    }
+
+    100% {
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+}
