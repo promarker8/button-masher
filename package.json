@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "postinstall": "npm rebuild"
+    "test": "ng test"
   },
   "engines": {
     "node": "22.x"
