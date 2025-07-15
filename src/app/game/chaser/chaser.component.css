@@ -35,3 +35,24 @@ body {
     font-weight: bold;
     color: #275a04;
 }
+
+.instructions {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    box-shadow: 0 0 20px #ff008c;
+    border: 2px solid #ff00bb;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    user-select: none;
+    border-radius: 20px;
+}
+
+.instructions kbd {
+    background: #222;
+    color: #ffcc00;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: inset 0 -1px 0 #bb9900;
+    font-family: monospace;
+}

@@ -1,5 +1,6 @@
-<div style="padding-top: 30px;">
-    <div class="game-wrapper position-relative">
+<div style="padding: 60px 130px 0px 150px;" class="d-flex gap-5 row">
+
+    <div class="game-wrapper position-relative col-12 col-lg p-0">
         <div #gameContainer></div>
 
         <button *ngIf="!gameOver" class="pause-btn btn btn-warning btn-sm position-absolute top-0 end-0 m-2"
@@ -13,6 +14,17 @@
                 <p>Coins Collected: {{ finalScore }}</p>
             </div>
             <button class="btn btn-success btn-lg" (click)="restartGame()">▶ Play Again</button>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg p-0">
+        <div class="instructions p-3 mb-3 text-light">
+            <h3 class="mb-2">🚀 How to Play</h3>
+            <p><strong>Press <kbd>Spacebar</kbd> to jump!</strong> Avoid the flying asteroids ☄️ and collect as many
+                shiny coins 💰 as you can.</p>
+            <p>Every 10 seconds, your speed will increase - so get ready to jump faster and stay sharp!</p>
+            <p>Can you beat your high score and survive the asteroid storm? 🌟</p>
+            <small class="text-muted">Tip: Timing your jumps is key — don’t get caught!</small>
         </div>
     </div>
 </div>
