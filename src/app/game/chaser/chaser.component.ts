@@ -19,6 +19,8 @@ export class ChaserComponent implements OnInit, OnDestroy {
   private scoreService = inject(ScoreService);
   chaserScene!: ChaserScene;
   finalScore = 0;
+  readonly leaderboard = this.scoreService.topTimes;
+  readonly endGameText = this.scoreService.endGameText;
 
   ngOnInit() {
     this.startGame();

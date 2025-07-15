@@ -25,7 +25,7 @@ export class ChaserScene extends Phaser.Scene {
     safeTiles = 3;
 
     // changeable variables
-    playerVelocityX = 300;
+    playerVelocityX = 350;
     obstacleSize = 0.8;
     coinSize = 0.3;
 
@@ -36,9 +36,19 @@ export class ChaserScene extends Phaser.Scene {
     // boost logic
     boostKey!: Phaser.Input.Keyboard.Key;
     boosting = false;
-    boostAmount = 160;
+    boostAmount = 180;
     boostDuration = 1000; // milliseconds
     glow!: Phaser.GameObjects.Image;
+
+    // shield
+    shieldKey!: Phaser.Input.Keyboard.Key;
+    shieldActive = false;
+    shieldDuration = 800;
+    shieldGraphic!: Phaser.GameObjects.Graphics;
+
+    // game over
+    leaderboardText = "";
+    endGameText = "Game Over!";
 
     constructor(private scoreService: ScoreService) {
         super('ChaserScene');
@@ -55,6 +65,7 @@ export class ChaserScene extends Phaser.Scene {
 
     create() {
         this.scoreService.reset();
+        this.endGameText = "Game Over!";
 
         // background
         this.add.image(0, 0, 'background').setOrigin(0).setScrollFactor(0);
@@ -99,7 +110,17 @@ export class ChaserScene extends Phaser.Scene {
         //     loop: true
         // });
         this.scheduleNextObstacle();
-        this.physics.add.collider(this.player, this.obstacles, this.handleGameOver, undefined, this);
+        // adding the shield - so removing this below line
+        // this.physics.add.collider(this.player, this.obstacles, this.handleGameOver, undefined, this);
+
+        this.physics.add.collider(this.player, this.obstacles, (player, obstacle) => {
+            if (this.shieldActive) {
+                console.log('Shield blocked an obstacle!');
+                obstacle.destroy();
+            } else {
+                this.handleGameOver();
+            }
+        }, undefined, this);
 
         // Coins
         this.coins = this.physics.add.group();
@@ -166,6 +187,23 @@ export class ChaserScene extends Phaser.Scene {
         //         }
         //     }
         // });
+
+        // shield button
+        this.shieldKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
+        this.shieldGraphic = this.add.graphics();
+        this.shieldGraphic.fillStyle(0x3bdbff, 0.4);
+        this.shieldGraphic.fillCircle(0, 0, 40);
+        this.shieldGraphic.setVisible(false);
+        this.shieldGraphic.setDepth(2);
+        this.shieldGraphic.setScrollFactor(1);
+
+        //reset leaderboard
+        this.input.keyboard!.on('keydown-R', () => {
+            this.scoreService.clearLeaderboard();
+            console.log('Leaderboard reset');
+        });
+
     }
 
     override update(): void {
@@ -215,6 +253,14 @@ export class ChaserScene extends Phaser.Scene {
 
         if (this.glow) {
             this.glow.setPosition(this.player.x - 20, this.player.y);
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(this.shieldKey) && !this.shieldActive) {
+            this.activateShield();
+        }
+
+        if (this.shieldActive) {
+            this.shieldGraphic.setPosition(this.player.x + 3, this.player.y);
         }
 
     }
@@ -325,12 +371,35 @@ export class ChaserScene extends Phaser.Scene {
     }
 
     collectCoin(player: any, coin: any) {
-        coin.disableBody(true, true);
+        if (!this.shieldActive) {
 
-        this.scoreService.increment();
-        this.scoreText.setText('Coins: ' + this.scoreService.score());
+            coin.disableBody(true, true);
 
-        // Optional: play a sound, particle effect, etc.
+            this.scoreService.increment();
+            // this.scoreService.incrementByAmount(5);
+            const score = this.scoreService.score();
+            this.scoreText.setText('Coins: ' + score);
+
+            if (score >= 20 && !this.scoreService.gameOver()) {
+                this.reachCoinGoal();
+            }
+        }
+    }
+
+    reachCoinGoal() {
+        console.log(`Completed in ${this.gameTime} seconds`);
+
+        this.scoreService.setEndGameText("You did it!");
+
+        this.physics.pause();
+        this.scoreService.setGameOver();
+
+        const completionTime = this.gameTime;
+        this.scoreService.saveCompletionTime(completionTime);
+
+        this.timerText.setColor('#114011ff');
+
+        this.showLeaderboard();
     }
 
     increaseDifficulty(speedUp: number) {
@@ -370,8 +439,34 @@ export class ChaserScene extends Phaser.Scene {
         });
     }
 
+    activateShield() {
+        this.shieldActive = true;
+        this.shieldGraphic.setVisible(true);
+
+        // Optional sound/flash/visual here
+
+        this.time.delayedCall(this.shieldDuration, () => {
+            this.shieldActive = false;
+            this.shieldGraphic.setVisible(false);
+        });
+    }
+
+    showLeaderboard() {
+        const topTimes = this.scoreService.getTopTimes();
+        this.leaderboardText = topTimes
+            .map((time, i) => `${i + 1}. ${time}s`)
+            .join('\n');
+    }
+
+    clearLeaderboard() {
+        localStorage.removeItem('topTimes');
+    }
+
     handleGameOver() {
         this.physics.pause();
+        this.scoreService.setEndGameText("Game Over!");
+        this.scoreService.saveScore(this.scoreService.score());
+        this.showLeaderboard();
         this.scoreService.setGameOver();
         this.timerText.setColor('#ff0000');
         this.scoreText.setText('');

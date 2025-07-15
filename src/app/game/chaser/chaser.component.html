@@ -10,7 +10,7 @@
 
         <div *ngIf="gameOver" class="overlay d-flex flex-column justify-content-center align-items-center">
             <div class="game-over-score mb-3">
-                <p>Game Over! </p>
+                <p>{{ endGameText() }}</p>
                 <p>Coins Collected: {{ finalScore }}</p>
             </div>
             <button class="btn btn-success btn-lg" (click)="restartGame()">▶ Play Again</button>
@@ -18,13 +18,26 @@
     </div>
 
     <div class="col-12 col-lg p-0">
-        <div class="instructions p-3 mb-3 text-light">
+        <div class="row instructions p-3 mb-3 text-light">
             <h3 class="mb-2">🚀 How to Play</h3>
             <p><strong>Press <kbd>Spacebar</kbd> to jump!</strong> Avoid the flying asteroids ☄️ and collect as many
                 shiny coins 💰 as you can.</p>
             <p>Every 10 seconds, your speed will increase - so get ready to jump faster and stay sharp!</p>
+            <p>Zoom by pressing Z on your keyboard, to help you avaid your obstacles</p>
+            <p>Press S on your keyboard to shield yourself for a second - but be careful - you can't colelct coins while
+                in your shield</p>
             <p>Can you beat your high score and survive the asteroid storm? 🌟</p>
-            <small class="text-muted">Tip: Timing your jumps is key — don’t get caught!</small>
+            <small class="text-muted">Tip: Timing your jumps is key - don't get caught!</small>
         </div>
+
+        <div class="row leaderboard-container p-4">
+            <h3>Fastest Times</h3>
+            <ul class="px-3">
+                <li *ngFor="let time of leaderboard(); index as i">
+                    {{ i + 1 }}. {{ time }}s
+                </li>
+            </ul>
+        </div>
+
     </div>
 </div>
