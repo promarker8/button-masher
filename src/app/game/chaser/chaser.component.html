@@ -1,8 +1,8 @@
-<div id="chaser-scene" class="container-fluid py-5 px-3 px-md-5">
-    <div class="row gy-4 gx-5 align-items-start flex-column flex-lg-row">
+<div id="chaser-scene" class="container-fluid py-5 px-3 px-md-5 pe-xl-3">
+    <div class="row align-items-start flex-column flex-lg-row">
 
         <!-- Game Container -->
-        <div class="col-12 col-xl-8 game-wrapper position-relative">
+        <div class="col-12 col-xl-8 p-0 game-wrapper position-relative">
             <div #gameContainer class="game-canvas"></div>
 
             <button *ngIf="!gameOver" class="pause-btn btn btn-warning btn-sm position-absolute m-2"
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Instructions + Leaderboard -->
-        <div class="col-12 col-xl-4">
+        <div class="col-12 col-xl-4 px-5 px-xl-2 ps-xl-3">
             <div class="instructions p-3 mb-4 text-light">
                 <p class="mb-4"><strong>Objective:</strong> Collect 20 coins as fast as you can! 💰</p>
                 <h3 class="mb-3">🚀 How to Play</h3>
@@ -29,7 +29,7 @@
                 <small class="text-muted mt-3 d-block">Press <kbd>R</kbd> to reset leaderboard.</small>
             </div>
 
-            <div class="leaderboard-container p-4">
+            <div class="leaderboard-container p-4" *ngIf="leaderboard().length > 0">
                 <h3>Fastest Times</h3>
                 <ul class="px-3">
                     <li *ngFor="let time of leaderboard(); index as i">{{ i + 1 }}. {{ time }}s</li>

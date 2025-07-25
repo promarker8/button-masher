@@ -6,11 +6,13 @@
 
     <canvas #canvas width="900" height="500"></canvas>
 
-    <div class="controls w-100 d-flex justify-content-center align-items-end gap-3 py-3">
-        <button class="btn digi-controls" (click)="feedPet()">
+    <h6 class="pt-3">Feed them, play with them!</h6>
+
+    <div class="controls w-100 d-flex justify-content-center align-items-end gap-3 pb-3">
+        <button class="btn digi-controls swell" (click)="feedPet()">
             <img [src]="foodImagePath" alt="Feed" class="button-img" />
         </button>
-        <button class="btn digi-controls" (click)="playWithPet()">
+        <button class="btn digi-controls swell" (click)="playWithPet()">
             <img [src]="playToyImagePath" alt="Play" class="button-img" />
         </button>
     </div>

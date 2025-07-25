@@ -24,8 +24,11 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   private petImages: { [key: string]: HTMLImageElement } = {};
   private currentMood: 'happy' | 'worried' | 'sad' | 'hungry' | 'dead' = 'happy';
 
-  currentFood: 'carrot' | 'lettuce' = 'carrot';
-  currentPlayToy: 'ball' | 'string' = 'ball';
+  currentFoodIndex = 0;
+  currentToyIndex = 0;
+  foodItems: string[] = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'];
+  toyItems: string[] = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8'];
+
 
   ngAfterViewInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d')!;
@@ -129,16 +132,14 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     this.hunger = Math.max(this.hunger - 10, 0);
     this.updatePetMood();
 
-    this.currentFood = this.currentFood === 'carrot' ? 'lettuce' : 'carrot';
-
+    this.currentFoodIndex = (this.currentFoodIndex + 1) % this.foodItems.length;
   }
 
   playWithPet() {
     this.boredom = Math.max(this.boredom - 10, 0);
     this.updatePetMood();
 
-    this.currentPlayToy = this.currentPlayToy === 'ball' ? 'string' : 'ball';
-
+    this.currentToyIndex = (this.currentToyIndex + 1) % this.toyItems.length;
   }
 
   updatePetMood() {
@@ -170,11 +171,11 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   get foodImagePath(): string {
-    return `assets/${this.currentFood}.png`;
+    return `assets/${this.foodItems[this.currentFoodIndex]}.png`;
   }
 
   get playToyImagePath(): string {
-    return `assets/${this.currentPlayToy}.png`;
+    return `assets/${this.toyItems[this.currentToyIndex]}.png`;
   }
 
   ngOnDestroy() {
