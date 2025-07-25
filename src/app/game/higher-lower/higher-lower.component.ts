@@ -141,6 +141,8 @@ export class HigherLowerComponent implements OnInit {
       this.wrongGuessAnim = true;
     }
 
+    this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+
     this.flipped = true; // triggers flip
     // this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
 
@@ -159,8 +161,6 @@ export class HigherLowerComponent implements OnInit {
 
   onCardFlipEnd(): void {
     if (this.swapAfterFlip) {
-      this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
-
       this.currentCard = this.nextCard;
       this.nextCard = null;
       this.swapAfterFlip = false;
