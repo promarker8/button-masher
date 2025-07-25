@@ -81,6 +81,7 @@ export class GameComponent implements OnInit {
 
         highlightNext();
         sidebar.classList.remove('sidebar-slow-open');
+        this.showToggleButton = true;
       }, sidebarTransitionTime);
     }, 1000); // delay after landing animation
   }
