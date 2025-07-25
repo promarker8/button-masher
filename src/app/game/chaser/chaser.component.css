@@ -9,16 +9,20 @@
 html,
 body {
     background: radial-gradient(circle at 50% 50%, #6b3faeb6, #fdc7e9c7) !important;
-    display: flex;
-    justify-content: center;
+    margin: 0;
+    padding: 0;
 }
 
-:host {
+#chaser-scene {
+    min-height: 100vh;
+}
+
+/* :host {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
+} */
+/* 
 .overlay {
     position: absolute;
     top: 0;
@@ -55,12 +59,107 @@ body {
     font-weight: bold;
     box-shadow: inset 0 -1px 0 #bb9900;
     font-family: monospace;
+} */
+
+/* .leaderboard-container {
+    /* margin-left: auto;
+    margin-right: auto; */
+/* max-width: 300px;
+} */
+/* 
+.leaderboard-container h3 {
+    font-size: 20px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+}
+
+.leaderboard-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.leaderboard-container li {
+    padding: 4px 0;
+    font-size: 16px;
+} */
+
+/* canvas {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding: 40px;
+} */
+
+
+.game-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.game-canvas {
+    width: 100%;
+    /* max-width: 800px; */
+    margin: 0 auto;
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 95%;
+    background-color: rgba(255, 255, 255, 0.462);
+    z-index: 10;
+}
+
+.pause-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+}
+
+.game-over-score {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #275a04;
+}
+
+/* Instructions styling */
+.instructions {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    box-shadow: 0 0 20px #ff008c;
+    border: 2px solid #ff00bb;
+    border-radius: 20px;
+    user-select: none;
+}
+
+.instructions kbd {
+    background: #222;
+    color: #ffcc00;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: inset 0 -1px 0 #bb9900;
+    font-family: monospace;
 }
 
 .leaderboard-container {
-    /* margin-left: auto;
-    margin-right: auto; */
     max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .leaderboard-container h3 {
@@ -78,4 +177,38 @@ body {
 .leaderboard-container li {
     padding: 4px 0;
     font-size: 16px;
+}
+
+@media (max-width: 1200px) {
+    .flex-lg-row {
+        flex-direction: column !important;
+    }
+
+    .game-wrapper {
+        transform: scale(0.9);
+        transform-origin: top center;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-wrapper {
+        transform: scale(0.8);
+        padding: 10px;
+    }
+
+    .instructions,
+    .leaderboard-container {
+        font-size: 0.9rem;
+        padding: 1rem;
+    }
+
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.5rem 1.2rem;
+    }
+
+    .pause-btn {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.4rem;
+    }
 }

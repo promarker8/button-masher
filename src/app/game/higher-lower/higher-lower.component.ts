@@ -42,6 +42,10 @@ export class HigherLowerComponent implements OnInit {
   constructor(private gameService: GameService) { }
 
   ngOnInit(): void {
+    this.initializeDeck();
+  }
+
+  initializeDeck(): void {
     this.gameService.newDeck().subscribe(data => {
       this.deckId = data.deck_id;
 
@@ -54,7 +58,6 @@ export class HigherLowerComponent implements OnInit {
         this.currentCard = this.fullCardPool.shift() || null;
 
         this.flipped = true;
-
       });
     });
   }
@@ -68,20 +71,58 @@ export class HigherLowerComponent implements OnInit {
     this.flipped = false;
   }
 
-  guess(direction: 'higher' | 'lower'): void {
-    // reset the streaks
-    this.showStreakEffect = false;
-    this.showLostStreakEffect = false;
+  // guess(direction: 'higher' | 'lower'): void {
+  //   // reset the streaks
+  //   this.showStreakEffect = false;
+  //   this.showLostStreakEffect = false;
 
+  //   if (!this.currentCard || this.isBusy || this.fullCardPool.length === 0) return;
+
+  //   this.isBusy = true;
+  //   this.flipped = true; // triggers the flip
+  //   this.swapAfterFlip = true;
+  //   this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+
+  //   this.nextCard = this.fullCardPool.shift() || null;
+  //   if (!this.nextCard) return;
+
+  //   const currentValue = this.getCardNumericValue(this.currentCard.value);
+  //   const nextValue = this.getCardNumericValue(this.nextCard.value);
+
+  //   const correctGuess =
+  //     (direction === 'higher' && nextValue > currentValue) ||
+  //     (direction === 'lower' && nextValue < currentValue);
+
+  //   this.results.push(correctGuess ? 'correct' : 'wrong');
+
+  //   if (correctGuess) {
+  //     this.updateScore(1);
+  //     this.streak++;
+
+  //     if (this.streak >= 3) {
+  //       this.showStreakEffect = true;
+  //     }
+
+  //   } else {
+  //     if (this.streak >= 3) {
+  //       this.showLostStreakEffect = true;
+  //     }
+
+  //     this.streak = 0;
+  //     this.wrongGuessAnim = true;
+  //   }
+
+  //   // Wait for transition to finish before swapping card!!!!!
+  //   this.pendingCardSwap = true;
+  // }
+
+  guess(direction: 'higher' | 'lower'): void {
     if (!this.currentCard || this.isBusy || this.fullCardPool.length === 0) return;
 
     this.isBusy = true;
-    this.flipped = true; // triggers the flip
-    this.swapAfterFlip = true;
-    this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
-
+    this.showStreakEffect = false;
+    this.showLostStreakEffect = false;
     this.nextCard = this.fullCardPool.shift() || null;
-    if (!this.nextCard) return;
 
     const currentValue = this.getCardNumericValue(this.currentCard.value);
     const nextValue = this.getCardNumericValue(this.nextCard.value);
@@ -90,27 +131,30 @@ export class HigherLowerComponent implements OnInit {
       (direction === 'higher' && nextValue > currentValue) ||
       (direction === 'lower' && nextValue < currentValue);
 
-    this.results.push(correctGuess ? 'correct' : 'wrong');
-
     if (correctGuess) {
       this.updateScore(1);
       this.streak++;
-
-      if (this.streak >= 3) {
-        this.showStreakEffect = true;
-      }
-
+      if (this.streak >= 3) this.showStreakEffect = true;
     } else {
-      if (this.streak >= 3) {
-        this.showLostStreakEffect = true;
-      }
-
+      if (this.streak >= 3) this.showLostStreakEffect = true;
       this.streak = 0;
       this.wrongGuessAnim = true;
     }
 
-    // Wait for transition to finish before swapping card!!!!!
-    this.pendingCardSwap = true;
+    this.flipped = true; // triggers flip
+    this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+
+    setTimeout(() => {
+      this.currentCard = this.nextCard;
+      this.nextCard = null;
+    }, 250); // match halfway point of 0.5s flip
+
+    // 🌟 Unflip card after the animation
+    setTimeout(() => {
+      this.flipped = false;
+      this.isBusy = false;
+      this.wrongGuessAnim = false;
+    }, 500); // match full flip duration
   }
 
   onCardFlipEnd(): void {
@@ -157,23 +201,35 @@ export class HigherLowerComponent implements OnInit {
   }
 
   endGame(): void {
-    this.gameOn = false;
-    this.results = [];
 
-    if (this.score > 0) {
-      this.previousScore = this.score;
-      this.leaderboard.push(this.score);
-      this.leaderboard.sort((a, b) => b - a);
-      this.leaderboard = this.leaderboard.slice(0, 5);
-    }
-
-    this.score = 0;
-    this.currentCard = null;
-    this.nextCard = null;
-    this.isBusy = false;
-    this.flipped = true;
     this.currentBackIndex = 0;
-    this.drawFirstCard();
+    this.flipped = true;
+    this.isBusy = true;
+
+    setTimeout(() => {
+      this.gameOn = false;
+      this.results = [];
+
+      if (this.score > 0) {
+        this.previousScore = this.score;
+        this.leaderboard.push(this.score);
+        this.leaderboard.sort((a, b) => b - a);
+        this.leaderboard = this.leaderboard.slice(0, 5);
+      }
+
+      this.score = 0;
+      this.currentCard = null;
+      this.nextCard = null;
+      this.isBusy = false;
+      this.streak = 0;
+      this.showStreakEffect = false;
+      this.showLostStreakEffect = false;
+      this.scorePopup = null;
+      this.isPulsing = false;
+      this.wrongGuessAnim = false;
+
+      this.initializeDeck();
+    }, 500);
   }
 
   drawFirstCard(): void {

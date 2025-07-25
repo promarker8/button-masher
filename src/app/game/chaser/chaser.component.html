@@ -1,44 +1,40 @@
-<div style="padding: 60px 130px 0px 150px;" class="d-flex gap-5 row">
+<div id="chaser-scene" class="container-fluid py-5 px-3 px-md-5">
+    <div class="row gy-4 gx-5 align-items-start flex-column flex-lg-row">
 
-    <div class="game-wrapper position-relative col-12 col-lg p-0">
-        <div #gameContainer></div>
+        <!-- Game Container -->
+        <div class="col-12 col-lg-8 game-wrapper position-relative">
+            <div #gameContainer class="game-canvas"></div>
 
-        <button *ngIf="!gameOver" class="pause-btn btn btn-warning btn-sm position-absolute top-0 end-0 m-2"
-            (click)="togglePause()">
-            ⏸ Pause
-        </button>
+            <button *ngIf="!gameOver" class="pause-btn btn btn-warning btn-sm position-absolute m-2"
+                (click)="togglePause()">⏸ Pause</button>
 
-        <div *ngIf="gameOver" class="overlay d-flex flex-column justify-content-center align-items-center">
-            <div class="game-over-score mb-3">
-                <p>{{ endGameText() }}</p>
-                <p>Coins Collected: {{ finalScore }}</p>
+            <div *ngIf="gameOver" class="overlay d-flex flex-column justify-content-center align-items-center">
+                <div class="game-over-score mb-3">
+                    <p>{{ endGameText() }}</p>
+                    <p>Coins Collected: {{ finalScore }}</p>
+                </div>
+                <button class="btn btn-success btn-lg" (click)="restartGame()">▶ Play Again</button>
             </div>
-            <button class="btn btn-success btn-lg" (click)="restartGame()">▶ Play Again</button>
-        </div>
-    </div>
-
-    <div class="col-12 col-lg p-0">
-        <div class="row instructions p-3 mb-3 text-light">
-            <p class="mb-4"><strong>Objective:</strong> Collect 20 coins as fast as you can! 💰</p>
-            <h3 class="mb-3">🚀 How to Play</h3>
-            <p>Press <kbd>Spacebar</kbd> to jump (and double jump)</p>
-            <p>Avoid the flying asteroids ☄️ as you go.</p>
-            <p>Every 10 seconds, your speed will increase - so get ready to jump faster and stay sharp!</p>
-            <p>Zoom by pressing <kbd>Z</kbd> on your keyboard, to help you avaid your obstacles</p>
-            <p>Press <kbd>S</kbd> on your keyboard to shield yourself for a second - but be careful - you can't collect
-                coins while
-                in your shield</p>
-            <p>Can you beat your high score and survive the asteroid storm? 🌟</p>
-            <small class="text-muted mt-3">Press <kbd>R</kbd> to clear you leaderboard, good luck!</small>
         </div>
 
-        <div class="row leaderboard-container p-4">
-            <h3>Fastest Times</h3>
-            <ul class="px-3">
-                <li *ngFor="let time of leaderboard(); index as i">
-                    {{ i + 1 }}. {{ time }}s
-                </li>
-            </ul>
+        <!-- Instructions + Leaderboard -->
+        <div class="col-12 col-lg-4">
+            <div class="instructions p-3 mb-4 text-light">
+                <p class="mb-4"><strong>Objective:</strong> Collect 20 coins as fast as you can! 💰</p>
+                <h3 class="mb-3">🚀 How to Play</h3>
+                <p>Press <kbd>Spacebar</kbd> to jump (and double jump)</p>
+                <p>Avoid the flying asteroids ☄️ as you go.</p>
+                <p>Every 10 seconds, your speed will increase.</p>
+                <p>Press <kbd>Z</kbd> to boost and <kbd>S</kbd> to shield yourself.</p>
+                <small class="text-muted mt-3 d-block">Press <kbd>R</kbd> to reset leaderboard.</small>
+            </div>
+
+            <div class="leaderboard-container p-4">
+                <h3>Fastest Times</h3>
+                <ul class="px-3">
+                    <li *ngFor="let time of leaderboard(); index as i">{{ i + 1 }}. {{ time }}s</li>
+                </ul>
+            </div>
         </div>
 
     </div>

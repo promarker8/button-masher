@@ -271,7 +271,31 @@ body {
     }
 }
 
+@media (max-width: 600px) {
+    .game-container {
+        transform: scale(0.70);
+        transform-origin: top center;
+        margin: 0;
+    }
 
+    #banner,
+    #end-game-btn {
+        transform: scale(0.55);
+        transform-origin: top center;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    html,
+    body {
+        margin: 0;
+        height: 100vh;
+    }
+}
 
 
 /* unused here but want to keep */
