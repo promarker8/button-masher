@@ -38,6 +38,7 @@ export class HigherLowerComponent implements OnInit {
 
   pendingCardSwap = false;
   swapAfterFlip = false;
+  backImageDuringFlip: string = '';
 
   constructor(private gameService: GameService) { }
 
@@ -63,7 +64,7 @@ export class HigherLowerComponent implements OnInit {
   }
 
   get backImageUrl(): string {
-    return this.cardBacks[this.currentBackIndex];
+    return this.flipped ? this.backImageDuringFlip : this.cardBacks[this.currentBackIndex];
   }
 
   startGame(): void {
@@ -141,6 +142,7 @@ export class HigherLowerComponent implements OnInit {
       this.wrongGuessAnim = true;
     }
 
+    this.backImageDuringFlip = this.cardBacks[this.currentBackIndex];
     this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
 
     this.flipped = true; // triggers flip
