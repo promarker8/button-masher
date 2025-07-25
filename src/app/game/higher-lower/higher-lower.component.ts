@@ -147,6 +147,8 @@ export class HigherLowerComponent implements OnInit {
     setTimeout(() => {
       this.currentCard = this.nextCard;
       this.nextCard = null;
+      this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+
     }, 250); // match halfway point of 0.5s flip
 
     // 🌟 Unflip card after the animation
@@ -154,8 +156,6 @@ export class HigherLowerComponent implements OnInit {
       this.flipped = false;
       this.isBusy = false;
       this.wrongGuessAnim = false;
-      this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
-
     }, 500); // match full flip duration
   }
 
