@@ -142,11 +142,13 @@ export class HigherLowerComponent implements OnInit {
     }
 
     this.flipped = true; // triggers flip
-    this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+    // this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
 
     setTimeout(() => {
       this.currentCard = this.nextCard;
       this.nextCard = null;
+      this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+
     }, 250); // match halfway point of 0.5s flip
 
     // 🌟 Unflip card after the animation

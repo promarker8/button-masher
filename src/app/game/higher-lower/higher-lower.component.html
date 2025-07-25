@@ -1,5 +1,5 @@
-<div id="banner" class="pt-1 pb-0 text-center sticky-top mt-4">
-    <h1 class="display-4 fw-bold">Higher or Lower</h1>
+<div id="banner" class="container text-center">
+    <h1 class="display-4 pt-3 fw-bold">Higher or Lower</h1>
     <p class="lead">Predict if the next card flips higher or lower — every guess could make or break your streak.</p>
 </div>
 
@@ -56,11 +56,12 @@
         <p class="lead mb-2">Game Over</p>
         <p class="lead">Final Score: {{ previousScore }}</p>
     </div>
-</div>
 
-<!-- End Game Button -->
-<div *ngIf="gameOn" class="buttons">
-    <button id="end-game-btn" class="btn" (click)="endGame()">
-        End Game
-    </button>
+    <!-- End Game Button -->
+    <div *ngIf="gameOn" class="buttons">
+        <button id="end-game-btn" class="btn" (click)="endGame()">
+            End Game
+        </button>
+    </div>
+
 </div>

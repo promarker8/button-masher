@@ -16,6 +16,15 @@ html {
 .main-content {
     position: relative;
     z-index: 1;
+    height: 100vh;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 /* .game-orb {

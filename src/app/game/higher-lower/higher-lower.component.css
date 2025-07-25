@@ -273,14 +273,14 @@ body {
 
 @media (max-width: 600px) {
     .game-container {
-        transform: scale(0.70);
+        transform: scale(0.7);
         transform-origin: top center;
         margin: 0;
     }
 
     #banner,
     #end-game-btn {
-        transform: scale(0.55);
+        transform: scale(0.7);
         transform-origin: top center;
     }
 
@@ -294,6 +294,15 @@ body {
     body {
         margin: 0;
         height: 100vh;
+    }
+
+    #end-game-btn {
+        position: static !important;
+        margin: 1rem auto;
+        display: block;
+        width: 90%;
+        box-shadow: none;
+        transform: none;
     }
 }
 
