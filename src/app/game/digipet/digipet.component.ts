@@ -19,6 +19,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   private hungerInterval!: number;
   boredom = 0;
   private boredomInterval!: number;
+  speechText: string = '';
 
   private petImages: { [key: string]: HTMLImageElement } = {};
   private currentMood: 'happy' | 'worried' | 'sad' | 'hungry' | 'dead' = 'happy';
@@ -67,11 +68,10 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   drawPet(mood: 'happy' | 'worried' | 'sad' | 'hungry' | 'dead') {
     this.currentMood = mood;
     const ctx = this.ctx;
-    ctx.clearRect(0, 0, 1000, 600); // match your canvas size
+    ctx.clearRect(0, 0, 900, 500);
 
-    // ✅ Draw preloaded background
     if (this.backgroundImage?.complete) {
-      ctx.drawImage(this.backgroundImage, 0, 0, 1000, 600);
+      ctx.drawImage(this.backgroundImage, 0, 0, 900, 500);
     }
 
     const petImg = this.petImages[mood];
@@ -80,16 +80,49 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       const petWidth = 200;
       const petHeight = 200;
 
-      const x = (1000 - petWidth) / 2;
-      const y = 340;
+      const x = (900 - petWidth) / 2;
+      const y = 255;
 
       ctx.drawImage(petImg, x, y, petWidth, petHeight);
+
+      if (this.speechText) {
+        this.drawSpeechBubble(x + petWidth / 2, y - 50, this.speechText);
+      }
+
     } else {
-      ctx.fillStyle = 'gray';
+      ctx.fillStyle = '#87a5f1';
       ctx.fillRect(450, 250, 100, 100);
       ctx.fillStyle = 'white';
       ctx.fillText('Loading...', 470, 300);
     }
+  }
+
+  drawSpeechBubble(x: number, y: number, text: string) {
+    const ctx = this.ctx;
+    const padding = 10;
+    ctx.font = '11px Arial';
+    const textWidth = ctx.measureText(text).width;
+    const bubbleWidth = textWidth + padding * 2;
+    const bubbleHeight = 40;
+
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = '#87a5f1';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(x, y, bubbleWidth, bubbleHeight, 10);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(x + 20, y + bubbleHeight);
+    ctx.lineTo(x + 10, y + bubbleHeight + 10);
+    ctx.lineTo(x + 30, y + bubbleHeight);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = 'black';
+    ctx.fillText(text, x + padding, y + 25);
   }
 
   feedPet() {
@@ -117,6 +150,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       console.log("Pet is dead");
       this.petStatus = 'Dead';
       this.drawPet('dead');
+      this.speechText = "Girl, you killed me";
     } else if (isHungry && isBored) {
       console.log("Pet is sad (hungry + bored)");
       this.petStatus = 'Sad';
