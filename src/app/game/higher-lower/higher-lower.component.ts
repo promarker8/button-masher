@@ -28,6 +28,7 @@ export class HigherLowerComponent implements OnInit {
   wrongGuessAnim = false;
   cardBacks: string[] = [];
   currentBackIndex = 0;
+  nextBackIndex = 1;
 
   scorePopup: string | null = null;
   isPulsing = false;
@@ -122,6 +123,7 @@ export class HigherLowerComponent implements OnInit {
     this.isBusy = true;
     this.showStreakEffect = false;
     this.showLostStreakEffect = false;
+
     this.nextCard = this.fullCardPool.shift() || null;
 
     const currentValue = this.getCardNumericValue(this.currentCard.value);
@@ -141,23 +143,26 @@ export class HigherLowerComponent implements OnInit {
       this.wrongGuessAnim = true;
     }
 
-    this.flipped = true; // triggers flip
-    // this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+    this.currentBackIndex = this.nextBackIndex;
+    this.flipped = true;
 
     setTimeout(() => {
       this.currentCard = this.nextCard;
       this.nextCard = null;
-      this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+    }, 250);
 
-    }, 250); // match halfway point of 0.5s flip
-
-    // 🌟 Unflip card after the animation
     setTimeout(() => {
       this.flipped = false;
       this.isBusy = false;
       this.wrongGuessAnim = false;
-    }, 500); // match full flip duration
+
+      this.nextBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+      const img = new Image();
+      img.src = this.cardBacks[this.nextBackIndex];
+
+    }, 500);
   }
+
 
   onCardFlipEnd(): void {
     if (this.swapAfterFlip) {
