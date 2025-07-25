@@ -154,12 +154,13 @@ export class HigherLowerComponent implements OnInit {
       this.flipped = false;
       this.isBusy = false;
       this.wrongGuessAnim = false;
-      this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
     }, 500); // match full flip duration
   }
 
   onCardFlipEnd(): void {
     if (this.swapAfterFlip) {
+      this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
+
       this.currentCard = this.nextCard;
       this.nextCard = null;
       this.swapAfterFlip = false;
