@@ -1,6 +1,7 @@
 <!-- Toggle Button -->
 <div [ngClass]="getSidebarClasses()">
-    <button *ngIf="isCollapsed" class="navBtn btn btn-outline-dark" (click)="toggleSidebar()" aria-label="Toggle menu">
+    <button *ngIf="isCollapsed && showToggleButton" class="navBtn btn btn-outline-dark" (click)="toggleSidebar()"
+        aria-label="Toggle menu">
         <i class="bi bi-list"></i>
     </button>
 </div>
@@ -18,6 +19,12 @@
             <a routerLink="/game" class="nav-link text-white" routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">
                 <i class="bi bi-house-fill"></i> Main Menu
+            </a>
+        </li>
+        <li class="nav-item">
+            <a routerLink="/game/digipet" class="nav-link text-white" routerLinkActive="active"
+                (click)="closeSidebar()">
+                <i class="bi bi-piggy-bank-fill"></i> DigiPet
             </a>
         </li>
         <li class="nav-item">

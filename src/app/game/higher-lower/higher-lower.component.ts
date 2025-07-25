@@ -12,49 +12,50 @@ import { CommonModule } from '@angular/common';
 })
 
 export class HigherLowerComponent implements OnInit {
-  gameOn: boolean = false;
-  flipped: boolean = true;
-  isBusy: boolean = false;
+  gameOn = false;
+  flipped = true;
+  isBusy = false;
 
   deckId: string | null = null;
   fullCardPool: any[] = [];
   currentCard: any = null;
   nextCard: any = null;
-  score: number = 0;
-  previousScore: number = 0;
+  score = 0;
+  previousScore = 0;
   results: string[] = [];
   leaderboard: number[] = [];
-  // backImageUrl = '';
-  wrongGuessAnim = false;
 
+  wrongGuessAnim = false;
   cardBacks: string[] = [];
   currentBackIndex = 0;
 
   scorePopup: string | null = null;
   isPulsing = false;
-  streak: number = 0;
-  showStreakEffect: boolean = false;
-  showLostStreakEffect: boolean = false;
+  streak = 0;
+
+  showStreakEffect = false;
+  showLostStreakEffect = false;
+
+  pendingCardSwap = false;
+  swapAfterFlip = false;
 
   constructor(private gameService: GameService) { }
 
   ngOnInit(): void {
     this.gameService.newDeck().subscribe(data => {
-      console.log("Deck:", data);
       this.deckId = data.deck_id;
-      // this.drawFirstCard();
 
       const totalBacks = 20;
       this.cardBacks = Array.from({ length: totalBacks }, (_, i) => `card-backs/${i + 1}.png`);
 
       this.gameService.drawCards(this.deckId!, 52).subscribe((cardData: { cards: any; }) => {
         const base = cardData.cards;
-
         this.fullCardPool = this.shuffleCards([...base, ...base, ...base, ...base]);
-
         this.currentCard = this.fullCardPool.shift() || null;
-      });
 
+        this.flipped = true;
+
+      });
     });
   }
 
@@ -67,30 +68,18 @@ export class HigherLowerComponent implements OnInit {
     this.flipped = false;
   }
 
-  drawFirstCard(): void {
-    if (!this.deckId) return;
-
-    this.gameService.drawCard(this.deckId).subscribe(cardData => {
-      this.currentCard = cardData.cards[0];
-    });
-  }
-
-  shuffleCards(cards: any[]): any[] {
-    for (let i = cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [cards[i], cards[j]] = [cards[j], cards[i]];
-    }
-    return cards;
-  }
-
   guess(direction: 'higher' | 'lower'): void {
+    // reset the streaks
+    this.showStreakEffect = false;
+    this.showLostStreakEffect = false;
+
     if (!this.currentCard || this.isBusy || this.fullCardPool.length === 0) return;
 
     this.isBusy = true;
-    this.flipped = true;
+    this.flipped = true; // triggers the flip
+    this.swapAfterFlip = true;
     this.currentBackIndex = (this.currentBackIndex + 1) % this.cardBacks.length;
 
-    // Get next card from local shuffled pool
     this.nextCard = this.fullCardPool.shift() || null;
     if (!this.nextCard) return;
 
@@ -109,39 +98,51 @@ export class HigherLowerComponent implements OnInit {
 
       if (this.streak >= 3) {
         this.showStreakEffect = true;
-        setTimeout(() => this.showStreakEffect = false, 1500);
       }
+
     } else {
       if (this.streak >= 3) {
         this.showLostStreakEffect = true;
-        setTimeout(() => this.showLostStreakEffect = false, 1500);
       }
 
       this.streak = 0;
       this.wrongGuessAnim = true;
-      setTimeout(() => this.wrongGuessAnim = false, 800);
     }
 
-    setTimeout(() => {
+    // Wait for transition to finish before swapping card!!!!!
+    this.pendingCardSwap = true;
+  }
+
+  onCardFlipEnd(): void {
+    if (this.swapAfterFlip) {
       this.currentCard = this.nextCard;
       this.nextCard = null;
-      this.flipped = false;
-      this.isBusy = false;
-    }, 550);
+      this.swapAfterFlip = false;
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.flipped = false;
+          this.isBusy = false;
+
+          // this.showStreakEffect = false;
+          // this.showLostStreakEffect = false;
+          this.wrongGuessAnim = false;
+        });
+      });
+
+      this.wrongGuessAnim = false;
+    }
   }
 
   updateScore(points: number) {
     this.score += points;
     this.scorePopup = `+${points}`;
     this.isPulsing = true;
+  }
 
-    setTimeout(() => {
-      this.scorePopup = null;
-    }, 1000);
-
-    setTimeout(() => {
-      this.isPulsing = false;
-    }, 1000);
+  onScorePopupEnd(): void {
+    this.scorePopup = null;
+    this.isPulsing = false;
   }
 
   getCardNumericValue(value: string): number {
@@ -161,7 +162,6 @@ export class HigherLowerComponent implements OnInit {
 
     if (this.score > 0) {
       this.previousScore = this.score;
-
       this.leaderboard.push(this.score);
       this.leaderboard.sort((a, b) => b - a);
       this.leaderboard = this.leaderboard.slice(0, 5);
@@ -176,9 +176,20 @@ export class HigherLowerComponent implements OnInit {
     this.drawFirstCard();
   }
 
-  // getRandomBackImage(): string {
-  //   const i = Math.floor(Math.random() * this.backImages.length);
-  //   return this.backImages[i];
-  // }
+  drawFirstCard(): void {
+    if (!this.deckId) return;
 
+    this.gameService.drawCard(this.deckId).subscribe(cardData => {
+      this.currentCard = cardData.cards[0];
+    });
+  }
+
+  shuffleCards(cards: any[]): any[] {
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+    return cards;
+  }
 }
+

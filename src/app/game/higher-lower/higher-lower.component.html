@@ -6,15 +6,16 @@
 <div class="game-container">
 
     <div class="streak-flash">
-        <span class="flash-text" [class.visible]="showStreakEffect">
+        <span class="flash-text" [class.visible]="showStreakEffect" (animationend)="showStreakEffect = false">
             🔥 {{ streak }} in a row 🔥
         </span>
-        <span class="flash-text" [class.visible]="showLostStreakEffect">
+
+        <span class="flash-text" [class.visible]="showLostStreakEffect" (animationend)="showLostStreakEffect = false">
             ☠️ Streak lost ☠️
         </span>
     </div>
 
-    <div class="card-wrapper mt-2" [class.flipped]="flipped">
+    <div class="card-wrapper mt-2" [class.flipped]="flipped" (transitionend)="onCardFlipEnd()">
         <div class="card-inner">
             <div class="card-front">
                 <img [src]="currentCard?.image" [alt]="currentCard?.code" class="card-img" />
@@ -25,12 +26,14 @@
         </div>
     </div>
 
+    <!-- Start button -->
     <div class="buttons mt-4" *ngIf="!gameOn">
         <button id="start-button" class="btn btn-large fs-4" (click)="startGame();">
             {{ previousScore ? "Play Again" : "Let's Play" }}
         </button>
     </div>
 
+    <!-- Game play buttons -->
     <div *ngIf="gameOn">
         <p>{{ currentCard.value }} of {{ currentCard.suit }}</p>
         <div class="buttons" *ngIf="currentCard">
@@ -39,21 +42,23 @@
         </div>
     </div>
 
+    <!-- Score & feedback -->
     <div class="mt-2" *ngIf="gameOn">
-        <div class="score-container" [class.pulsing]="isPulsing" [class.wrong-answer]="wrongGuessAnim">
+        <div class="score-container" [class.pulsing]="isPulsing" [class.wrong-answer]="wrongGuessAnim"
+            (animationend)="onScorePopupEnd()">
             Score: {{ score }}
             <div *ngIf="scorePopup" class="score-popup">{{ scorePopup }}</div>
         </div>
     </div>
 
-
+    <!-- Game over message -->
     <div *ngIf="!gameOn && previousScore > 0" class="game-over-message mt-2">
         <p class="lead mb-2">Game Over</p>
         <p class="lead">Final Score: {{ previousScore }}</p>
     </div>
-
 </div>
 
+<!-- End Game Button -->
 <div *ngIf="gameOn" class="buttons">
     <button id="end-game-btn" class="btn" (click)="endGame()">
         End Game

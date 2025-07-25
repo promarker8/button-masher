@@ -22,6 +22,10 @@
     background-color: #1b0101;
 }
 
+.digipet:not(button) {
+    background-color: #87a5f1;
+}
+
 .default {
     background-color: transparent;
 }
@@ -31,7 +35,7 @@
 }
 
 .sidebar-slow-open {
-    transition: all 1s ease !important;
+    transition: all .9s ease !important;
 }
 
 /* .backdrop {
@@ -87,6 +91,10 @@ nav {
     background-color: #1b0101;
 }
 
+.digipet .navBtn:hover {
+    background-color: #87a5f1;
+}
+
 .navBtn i {
     display: flex;
 }
@@ -114,6 +122,22 @@ nav {
 
 nav i:not(.navBtnInBar i) {
     color: rgb(213, 0, 0) !important;
+}
+
+nav.hilo i:not(.navBtnInBar i) {
+    color: #ffc100 !important;
+}
+
+nav.chaser i:not(.navBtnInBar i) {
+    color: #ff00bc !important;
+}
+
+nav.digipet i:not(.navBtnInBar i) {
+    color: rgb(15, 24, 53) !important;
+}
+
+.digipet .navBtnInBar i {
+    color: rgb(15, 24, 53) !important;
 }
 
 .nav-highlight {

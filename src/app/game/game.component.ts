@@ -13,6 +13,7 @@ import { filter } from 'rxjs';
 
 export class GameComponent implements OnInit {
   isCollapsed = true;
+  showToggleButton = true;
 
   constructor(private renderer: Renderer2, private router: Router) { }
 
@@ -23,12 +24,16 @@ export class GameComponent implements OnInit {
         const url = event.urlAfterRedirects;
 
         if (url === '/game' || url === '/game/landing-page') {
+          this.showToggleButton = false;
           this.triggerSidebarAnimation();
+        } else {
+          this.showToggleButton = true;
         }
       });
 
     // Also trigger on initial load
     if (this.router.url === '/game' || this.router.url === '/game/landing-page') {
+      this.showToggleButton = false;
       this.triggerSidebarAnimation();
     }
   }
@@ -38,6 +43,7 @@ export class GameComponent implements OnInit {
 
     return {
       'collapsed': this.isCollapsed,
+      'digipet': url.includes('/game/digipet'),
       'chaser': url.includes('/game/chaser'),
       'hilo': url.includes('/game/higher-lower'),
       'default': !(url.includes('/game/chaser') || url.includes('/game/higher-lower'))
@@ -76,7 +82,7 @@ export class GameComponent implements OnInit {
         highlightNext();
         sidebar.classList.remove('sidebar-slow-open');
       }, sidebarTransitionTime);
-    }, 2000); // delay after landing animation
+    }, 1000); // delay after landing animation
   }
 
   toggleSidebar() {

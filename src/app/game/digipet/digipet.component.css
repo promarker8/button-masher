@@ -1,0 +1,78 @@
+    .pixi-container {
+        width: 300px;
+        height: 300px;
+        border: 2px solid #333;
+        margin-bottom: 10px;
+    }
+
+    .controls button {
+        margin-right: 10px;
+    }
+
+    .digi-controls {
+        width: 120px;
+        height: 70px;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        outline: none;
+        border: none;
+        background: none;
+    }
+
+    .digi-controls:active {
+        transform: scale(0.95);
+    }
+
+    .digi-controls:focus {
+        outline: none;
+    }
+
+    .digi-controls:focus-visible {
+        outline: none;
+    }
+
+    .button-img {
+        height: 50px;
+        width: auto;
+    }
+
+    .status-bars {
+        /* margin-top: 1rem; */
+        width: 300px;
+    }
+
+    .bar-label {
+        font-size: 0.9rem;
+        margin: 4px 0;
+    }
+
+    .bar-wrapper {
+        background-color: #e0e0e0;
+        border-radius: 8px;
+        height: 16px;
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: 12px;
+    }
+
+    .bar-fill {
+        height: 100%;
+        transition: width 0.3s ease;
+    }
+
+    .bar-fill.hunger {
+        background-color: #f4aedc;
+    }
+
+    .bar-fill.boredom {
+        background-color: #87a5f1;
+    }
+
+    body {
+        background-color: rgb(247, 245, 255);
+    }
+
+    .header h1 {
+        color: rgb(57, 90, 151);
+        font-weight: bold;
+    }
