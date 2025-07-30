@@ -42,7 +42,7 @@
         </button> -->
     </div>
 
-    <div id="menus">
+    <div id="menus" *ngIf="!isDead; else deadFoodMenu">
         <div class="menu-container">
             <h6>Food Menu</h6>
             <div class="menu-grid">
@@ -70,5 +70,14 @@
         </div>
 
     </div>
+
+    <ng-template #deadFoodMenu>
+        <div class="menu-item disabled revive-item">
+            <img src="assets/potion.png" alt="Revive" (click)="revivePet()" />
+            <div class="item-details">
+                <div class="item-value">Revive</div>
+            </div>
+        </div>
+    </ng-template>
 
 </div>

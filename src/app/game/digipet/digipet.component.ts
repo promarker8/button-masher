@@ -29,6 +29,8 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   private boredomInterval!: number;
   speechText: string = '';
 
+  isDead: boolean = false;
+
   private petImages: { [key: string]: HTMLImageElement } = {};
   private currentMood: 'happy' | 'worried' | 'sad' | 'hungry' | 'dead' = 'happy';
 
@@ -175,28 +177,39 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   updatePetMood() {
     const isHungry = this.hunger >= 30;
     const isBored = this.boredom >= 30;
-    const isDead = this.hunger >= 80 && this.boredom >= 70;
+    const isDying = this.hunger >= 80 && this.boredom >= 70;
+    const petHasDied = this.hunger >= 90 && this.boredom >= 90;
 
-    if (isDead) {
+    if (petHasDied) {
       console.log("Pet is dead");
       this.petStatus = 'Dead';
       this.drawPet('dead');
-      this.speechText = "Girl, you killed me";
+      this.isDead = true;
+      this.speechText = "....";
+    } else if (isDying) {
+      console.log("Pet is dead");
+      this.petStatus = 'Dead';
+      this.drawPet('dead');
+      this.speechText = "Girl, you're killing me";
     } else if (isHungry && isBored) {
       console.log("Pet is sad (hungry + bored)");
       this.petStatus = 'Sad';
       this.drawPet('sad');
+      this.speechText = "";
     } else if (isHungry) {
       console.log("Pet is hungry");
       this.petStatus = 'Hungry';
       this.drawPet('hungry');
+      this.speechText = "";
     } else if (isBored) {
       console.log("Pet is bored");
       this.petStatus = 'Bored';
       this.drawPet('worried');
+      this.speechText = "";
     } else {
       this.petStatus = 'Happy';
       this.drawPet('happy');
+      this.speechText = "";
     }
   }
 
@@ -224,6 +237,19 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     }
 
     this.updatePetMood();
+  }
+
+  revivePet() {
+    this.hunger = 0;
+    this.boredom = 0;
+    this.petStatus = 'Happy';
+    this.isDead = false;
+    this.drawPet('happy');
+    this.speechText = "I'm back!";
+    setTimeout(() => {
+      this.speechText = "";
+      this.drawPet('happy');
+    }, 2500);
   }
 
   ngOnDestroy() {
