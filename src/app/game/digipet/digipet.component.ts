@@ -185,7 +185,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       this.petStatus = 'Dead';
       this.drawPet('dead');
       this.isDead = true;
-      this.speechText = "....";
+      this.speechText = "";
     } else if (isDying) {
       console.log("Pet is dead");
       this.petStatus = 'Dead';
