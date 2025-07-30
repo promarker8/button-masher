@@ -1,9 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, AfterViewInit, ViewChild, OnDestroy, ViewEncapsulation } from '@angular/core';
+
+
+type PetEffect = {
+  hungerChange?: number;
+  boredomChange?: number;
+  speech?: string;
+};
 
 @Component({
   selector: 'app-digipet',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './digipet.component.html',
   styleUrl: './digipet.component.css',
   encapsulation: ViewEncapsulation.None,
@@ -26,8 +34,30 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
 
   currentFoodIndex = 0;
   currentToyIndex = 0;
-  foodItems: string[] = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'];
-  toyItems: string[] = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8'];
+  // foodItems: string[] = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'];
+  // toyItems: string[] = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8'];
+
+  foodItems = [
+    { id: 'f1', name: 'Carrot', effect: { hungerChange: -5 }, valueLabel: '-5 Hunger' },
+    { id: 'f2', name: 'Lettuce', effect: { hungerChange: -5 }, valueLabel: '-5 Hunger' },
+    { id: 'f3', name: 'Potato', effect: { hungerChange: -10 }, valueLabel: '-10 Hunger' },
+    { id: 'f4', name: 'Cherries', effect: { hungerChange: -7 }, valueLabel: '-7 Hunger' },
+    { id: 'f5', name: 'Fruit', effect: { hungerChange: -10 }, valueLabel: '-10 Hunger' },
+    { id: 'f6', name: 'Pickles', effect: { hungerChange: -8 }, valueLabel: '-8 Hunger' },
+    { id: 'f7', name: 'Burger', effect: { hungerChange: -15 }, valueLabel: '-15 Hunger' },
+    { id: 'f8', name: 'Full Irish', effect: { hungerChange: -30 }, valueLabel: '-30 Hunger' },
+  ];
+
+  toyItems = [
+    { id: 't1', name: 'Ball', effect: { boredomChange: -10 }, valueLabel: '-10 Boredom' },
+    { id: 't2', name: 'Yarn', effect: { boredomChange: -7 }, valueLabel: '-7 Boredom' },
+    { id: 't3', name: 'Teddy Bear', effect: { boredomChange: -12 }, valueLabel: '-12 Boredom' },
+    { id: 't4', name: 'Train', effect: { boredomChange: -10 }, valueLabel: '-10 Boredom' },
+    { id: 't5', name: 'Rubber Duck', effect: { boredomChange: -8 }, valueLabel: '-8 Boredom' },
+    { id: 't6', name: 'Lego', effect: { boredomChange: -15 }, valueLabel: '-15 Boredom' },
+    { id: 't7', name: 'Space Ship', effect: { boredomChange: -20 }, valueLabel: '-20 Boredom' },
+    { id: 't8', name: 'Starfish', effect: { boredomChange: -10 }, valueLabel: '-10 Boredom' },
+  ];
 
 
   ngAfterViewInit() {
@@ -176,6 +206,24 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
 
   get playToyImagePath(): string {
     return `assets/${this.toyItems[this.currentToyIndex]}.png`;
+  }
+
+  applyEffect(effect: PetEffect) {
+    if (effect.hungerChange) {
+      this.hunger = Math.max(0, Math.min(100, this.hunger + effect.hungerChange));
+    }
+    if (effect.boredomChange) {
+      this.boredom = Math.max(0, Math.min(100, this.boredom + effect.boredomChange));
+    }
+    if (effect.speech) {
+      this.speechText = effect.speech;
+      setTimeout(() => {
+        this.speechText = '';
+        this.drawPet(this.currentMood);
+      }, 2500);
+    }
+
+    this.updatePetMood();
   }
 
   ngOnDestroy() {

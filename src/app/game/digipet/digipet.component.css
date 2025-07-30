@@ -1,3 +1,8 @@
+    html,
+    body {
+        min-width: 313px;
+    }
+
     .pixi-container {
         width: 300px;
         height: 300px;
@@ -43,6 +48,12 @@
     .status-bars {
         /* margin-top: 1rem; */
         width: 300px;
+    }
+
+    @media (min-width: 1400px) {
+        .status-bars {
+            margin-left: 50px;
+        }
     }
 
     .bar-label {
@@ -143,5 +154,100 @@
 
         .digi-controls {
             padding: 0.3rem;
+        }
+    }
+
+
+    #menus {
+        display: flex;
+        max-width: 900px;
+    }
+
+    .menu-container {
+        margin: 15px auto;
+        max-width: 800px;
+        padding: 0 5px;
+    }
+
+    .menu-container h6 {
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    .menu-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .menu-item {
+        /* width: calc(50% - 6px); */
+        background-color: #f8f9fa;
+        border: 1px solid #b0c4de;
+        border-radius: 10px;
+        width: 80px;
+        padding: 5px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    .menu-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .menu-item img {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
+        margin-bottom: 5px;
+    }
+
+    .item-details {
+        font-size: 10px;
+    }
+
+    .item-name {
+        font-weight: 500;
+        margin-bottom: 3px;
+    }
+
+    .item-value {
+        color: #555;
+        font-size: 9px;
+    }
+
+    @media (max-width: 440px) {
+
+        .menu-container {
+            padding: 0;
+        }
+
+        .menu-grid {
+            gap: 6px;
+        }
+
+        .menu-item {
+            padding: 5px 0;
+            width: 65px
+        }
+
+        .menu-item img {
+            width: 25px;
+            height: 25px;
+            margin-bottom: 6px;
+        }
+
+        .item-name {
+            margin-bottom: 2px;
+            font-size: 9px;
+        }
+
+        .item-value {
+            font-size: 7px;
         }
     }

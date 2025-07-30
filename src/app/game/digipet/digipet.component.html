@@ -1,33 +1,70 @@
-<div class="container p-3 d-flex flex-column justify-content-center align-items-center">
+<div class="container mt-4 d-flex flex-column justify-content-center align-items-center">
 
-    <div class="pill">
-        <h1>Take care of your very own DigiPet</h1>
+    <div class="d-flex flex-column justify-content-center align-items-center">
+
+        <div class="pill">
+            <h1>Take care of your very own DigiPet</h1>
+        </div>
+
+        <div class="d-flex gap-1 flex-wrap justify-content-center align-items-center">
+
+            <div class="text-center">
+                <canvas #canvas width="900" height="500"></canvas>
+                <h6 class="pt-3">Feed them, play with them!</h6>
+            </div>
+
+            <div class="status-bars">
+                <div class="bar-label">Hunger</div>
+                <div class="bar-wrapper">
+                    <div class="bar-fill hunger" [style.width.%]="hunger"></div>
+                </div>
+
+                <div class="bar-label">Boredom</div>
+                <div class="bar-wrapper">
+                    <div class="bar-fill boredom" [style.width.%]="boredom"></div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
-    <canvas #canvas width="900" height="500"></canvas>
-
-    <h6 class="pt-3">Feed them, play with them!</h6>
-
-    <div class="controls w-100 d-flex justify-content-center align-items-end gap-3 pb-3">
-        <button class="btn digi-controls swell" (click)="feedPet()">
+    <div class="controls w-100 d-flex justify-content-center align-items-end">
+        <!-- <button class="btn digi-controls swell" (click)="feedPet()">
             <img [src]="foodImagePath" alt="Feed" class="button-img" />
         </button>
         <button class="btn digi-controls swell" (click)="playWithPet()">
             <img [src]="playToyImagePath" alt="Play" class="button-img" />
-        </button>
+        </button> -->
     </div>
 
-    <div class="status-bars">
-        <div class="bar-label">Hunger</div>
-        <div class="bar-wrapper">
-            <div class="bar-fill hunger" [style.width.%]="hunger"></div>
+    <div id="menus">
+        <div class="menu-container">
+            <h6>Food Menu</h6>
+            <div class="menu-grid">
+                <div *ngFor="let food of foodItems" class="menu-item" (click)="applyEffect(food.effect)">
+                    <img [src]="'assets/' + food.id + '.png'" [alt]="food.name" />
+                    <div class="item-details">
+                        <!-- <div class="item-name">{{ food.name }}</div> -->
+                        <div class="item-value">{{ food.valueLabel }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="bar-label">Boredom</div>
-        <div class="bar-wrapper">
-            <div class="bar-fill boredom" [style.width.%]="boredom"></div>
+        <div class="menu-container">
+            <h6>Toy Menu</h6>
+            <div class="menu-grid">
+                <div *ngFor="let toy of toyItems" class="menu-item" (click)="applyEffect(toy.effect)">
+                    <img [src]="'assets/' + toy.id + '.png'" [alt]="toy.name" />
+                    <div class="item-details">
+                        <!-- <div class="item-name">{{ toy.name }}</div> -->
+                        <div class="item-value">{{ toy.valueLabel }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
-
 
 </div>
