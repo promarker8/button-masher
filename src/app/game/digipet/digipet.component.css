@@ -73,6 +73,21 @@
     .bar-fill {
         height: 100%;
         transition: width 0.3s ease;
+        position: relative;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        padding-right: 5px;
+        overflow: hidden;
+        padding-left: 5px
+    }
+
+    .bar-label-inside {
+        font-size: 11px;
+        color: white;
+        margin-left: auto;
+        padding: 0 2px;
+        white-space: nowrap;
     }
 
     .bar-fill.hunger {
