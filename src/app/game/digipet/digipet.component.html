@@ -14,17 +14,21 @@
             </div>
 
             <div class="status-bars">
-                <div class="bar-label">Hunger</div>
-                <div class="bar-wrapper">
-                    <div class="bar-fill hunger" [style.width.%]="hunger">
-                        <span class="bar-label-inside" *ngIf="hunger > 0">{{ hunger }}%</span>
+                <div class="status-bar">
+                    <div class="bar-label">Hunger</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill hunger" [style.width.%]="hunger">
+                            <span class="bar-label-inside" *ngIf="hunger > 0">{{ hunger }}%</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="bar-label">Boredom</div>
-                <div class="bar-wrapper">
-                    <div class="bar-fill boredom" [style.width.%]="boredom">
-                        <span class="bar-label-inside" *ngIf="boredom > 0">{{ boredom }}%</span>
+                <div class="status-bar">
+                    <div class="bar-label">Boredom</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill boredom" [style.width.%]="boredom">
+                            <span class="bar-label-inside" *ngIf="boredom > 0">{{ boredom }}%</span>
+                        </div>
                     </div>
                 </div>
             </div>

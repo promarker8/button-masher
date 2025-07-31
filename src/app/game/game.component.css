@@ -10,7 +10,7 @@
     transition: transform 0.4s ease;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
     .sidebar.default {
         width: 230px;
         background-color: #1a1a1d !important;

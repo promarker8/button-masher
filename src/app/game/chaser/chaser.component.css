@@ -11,7 +11,6 @@ body {
     background: radial-gradient(circle at 50% 50%, #6b3faeb6, #fdc7e9c7) !important;
     margin: 0;
     padding: 0;
-    height: 100vh;
 }
 
 #chaser-scene {
@@ -146,11 +145,11 @@ canvas {
 
 .instructions kbd {
     background: #222;
-    color: #ffcc00;
+    color: #ffc400;
     padding: 3px 7px;
     border-radius: 4px;
     font-weight: bold;
-    box-shadow: inset 0 -1px 0 #bb9900;
+    box-shadow: inset 0 -1px 0 #ffc400;
     font-family: monospace;
 }
 
@@ -195,8 +194,12 @@ canvas {
 
     .instructions,
     .leaderboard-container {
-        font-size: 0.9rem;
+        font-size: 0.65rem;
         padding: 1rem;
+    }
+
+    .instructions h3 {
+        font-size: 14px;
     }
 
     .btn-lg {
@@ -207,5 +210,9 @@ canvas {
     .pause-btn {
         font-size: 0.6rem;
         padding: 0.2rem 0.4rem;
+    }
+
+    .overlay * {
+        font-size: 0.95rem;
     }
 }

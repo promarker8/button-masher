@@ -16,10 +16,21 @@ body {
     /* allow interaction */
 }
 
+@media (max-width: 1435px) {
+
+    .landing-hero h1 {
+        font-size: 32px
+    }
+
+    .landing-hero .lead {
+        font-size: 18px;
+    }
+}
+
 @media (max-width: 1000px) {
 
     .landing-hero h1 {
-        font-size: 20px
+        font-size: 22px
     }
 
     .landing-hero .lead {

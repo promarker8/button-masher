@@ -26,7 +26,8 @@
                 <p>Avoid the flying asteroids ☄️ as you go.</p>
                 <p>Every 10 seconds, your speed will increase.</p>
                 <p>Press <kbd>Z</kbd> to boost and <kbd>S</kbd> to shield yourself.</p>
-                <small class="text-muted mt-3 d-block">Press <kbd>R</kbd> to reset leaderboard.</small>
+                <small *ngIf="leaderboard().length > 0" class="text-muted mt-3 d-block">Press <kbd>R</kbd> to reset
+                    leaderboard.</small>
             </div>
 
             <div class="leaderboard-container p-4" *ngIf="leaderboard().length > 0">
