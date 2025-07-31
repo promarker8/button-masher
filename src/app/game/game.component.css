@@ -11,7 +11,7 @@
 }
 
 @media (max-width: 1000px) {
-    .sidebar {
+    .sidebar.default {
         width: 230px;
         background-color: #1a1a1d !important;
     }
