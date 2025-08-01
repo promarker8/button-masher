@@ -28,6 +28,8 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   boredom = 0;
   private boredomInterval!: number;
   speechText: string = '';
+  cleanliness = 0;
+  private cleanlinessInterval!: number;
 
   isDead: boolean = false;
 
@@ -80,7 +82,13 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
         this.boredomInterval = window.setInterval(() => {
           this.boredom = Math.min(this.boredom + 10, 100);
           this.updatePetMood();
-        }, 1400);
+        }, 2000);
+
+        this.cleanlinessInterval = window.setInterval(() => {
+          this.cleanliness = Math.min(this.cleanliness + 8, 100);
+          this.updatePetMood();
+        }, 4000);
+
       });
     };
   }
@@ -175,10 +183,11 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   updatePetMood() {
-    const isHungry = this.hunger >= 30;
+    const isHungry = this.hunger >= 40;
     const isBored = this.boredom >= 30;
-    const isDying = this.hunger >= 80 && this.boredom >= 70;
-    const petHasDied = this.hunger >= 90 && this.boredom >= 90;
+    const isDirty = this.cleanliness >= 50;
+    const isDying = this.hunger >= 80 && this.boredom >= 70 && this.cleanliness >= 80;
+    const petHasDied = this.hunger >= 90 && this.boredom >= 90 && this.cleanliness >= 80;
 
     if (petHasDied) {
       console.log("Pet is dead");
@@ -191,10 +200,15 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       this.petStatus = 'Dead';
       this.drawPet('dead');
       this.speechText = "Girl, you're killing me";
-    } else if (isHungry && isBored) {
+    } else if ((isHungry && isBored && isDirty) || this.boredom >= 90) {
       console.log("Pet is sad (hungry + bored)");
       this.petStatus = 'Sad';
       this.drawPet('sad');
+      this.speechText = "";
+    } else if (isDirty) {
+      console.log("Pet is dirty");
+      this.petStatus = 'Dirty';
+      this.drawPet('worried');
       this.speechText = "";
     } else if (isHungry) {
       console.log("Pet is hungry");
@@ -233,7 +247,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       setTimeout(() => {
         this.speechText = '';
         this.drawPet(this.currentMood);
-      }, 2500);
+      }, 2000);
     }
 
     this.updatePetMood();

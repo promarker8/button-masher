@@ -134,6 +134,10 @@
         background-color: #87a5f1;
     }
 
+    .bar-fill.cleanliness {
+        background-color: #aad872;
+    }
+
     @media (min-width: 658px) and (max-width: 1399px) {
         .status-bars {
             flex-direction: row;

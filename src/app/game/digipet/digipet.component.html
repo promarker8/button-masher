@@ -31,6 +31,16 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="status-bar">
+                    <div class="bar-label">Cleanliness</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill cleanliness" [style.width.%]="cleanliness">
+                            <span class="bar-label-inside" *ngIf="cleanliness > 0">{{ cleanliness }}%</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
