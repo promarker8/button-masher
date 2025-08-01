@@ -30,6 +30,8 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   speechText: string = '';
   cleanliness = 0;
   private cleanlinessInterval!: number;
+  isShowerMode = false;
+  isWaterRunning = false;
 
   isDead: boolean = false;
 
@@ -251,6 +253,33 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     }
 
     this.updatePetMood();
+  }
+
+  startShowerMode() {
+    this.isShowerMode = true;
+    this.backgroundImage.src = 'assets/bathroom.png';
+    this.drawPet(this.currentMood);
+  }
+
+  toggleShowerHead() {
+    if (!this.isWaterRunning) {
+      this.isWaterRunning = true;
+      const interval = setInterval(() => {
+        if (!this.isShowerMode || this.cleanliness <= 0) {
+          clearInterval(interval);
+          this.isWaterRunning = false;
+          return;
+        }
+        this.cleanliness = Math.max(0, this.cleanliness - 8);
+        this.drawPet(this.currentMood);
+      }, 200);
+    }
+  }
+
+  endShowerMode() {
+    this.isShowerMode = false;
+    this.backgroundImage.src = 'assets/room2.png';
+    this.drawPet(this.currentMood);
   }
 
   revivePet() {
