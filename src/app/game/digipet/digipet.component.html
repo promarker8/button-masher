@@ -2,45 +2,121 @@
 
     <div class="d-flex flex-column justify-content-center align-items-center">
 
-        <div class="pill">
+        <!-- <div class="pill">
             <h1>Take care of your very own DigiPet</h1>
-        </div>
+        </div> -->
 
         <div class="d-flex gap-1 flex-wrap justify-content-center align-items-center">
 
-            <div class="text-center">
-                <canvas #canvas width="900" height="500"></canvas>
-                <h6 class="pt-3">Feed them, play with them!</h6>
-            </div>
-
-            <div class="status-bars">
-                <div class="status-bar">
-                    <div class="bar-label">Hunger</div>
-                    <div class="bar-wrapper">
-                        <div class="bar-fill hunger" [style.width.%]="hunger">
-                            <span class="bar-label-inside" *ngIf="hunger > 0">{{ hunger }}%</span>
-                        </div>
-                    </div>
+            <div class="console-frame">
+                <div class="console-top">
+                    <div class="camera-dot"></div>
                 </div>
 
-                <div class="status-bar">
-                    <div class="bar-label">Boredom</div>
-                    <div class="bar-wrapper">
-                        <div class="bar-fill boredom" [style.width.%]="boredom">
-                            <span class="bar-label-inside" *ngIf="boredom > 0">{{ boredom }}%</span>
-                        </div>
+                <div class="console-screen">
+                    <div class="screen-overlay" id="screenOverlay"></div>
+
+                    <!-- when dead -->
+                    <div class="canvas-overlay" *ngIf="isDead">
+                        <ng-template [ngTemplateOutlet]="deadMenu"></ng-template>
                     </div>
+
+                    <!-- back to rest of game -->
+                    <div class="room-sign" *ngIf="!isShowerMode">Living Room</div>
+                    <div class="room-sign bathroom" *ngIf="isShowerMode">Bathroom</div>
+
+                    <div class="status-bars">
+                        <div *ngIf="!isShowerMode" class="status-bar">
+                            <div class="bar-label">Fed</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill hunger"
+                                    [ngClass]="{'low': hunger <= 20 && hunger > 0, 'non-zero': hunger > 0}"
+                                    [style.width.%]="hunger">
+                                    <span class="bar-label-inside" *ngIf="hunger > 0">{{ hunger }}%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="!isShowerMode" class="status-bar">
+                            <div class="bar-label">Entertained</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill boredom"
+                                    [ngClass]="{'low': boredom <= 20 && boredom > 0, 'non-zero': boredom > 0}"
+                                    [style.width.%]="boredom">
+                                    <span class="bar-label-inside" *ngIf="boredom > 0">{{ boredom }}%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-bar">
+                            <div class="bar-label">Clean</div>
+                            <div class="bar-wrapper">
+                                <div class="bar-fill cleanliness"
+                                    [ngClass]="{'low': cleanliness <= 20 && cleanliness > 0, 'non-zero': cleanliness > 0}"
+                                    [style.width.%]="cleanliness">
+                                    <span class="bar-label-inside" *ngIf="cleanliness > 0">{{ cleanliness }}%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <canvas #canvas width="900" height="500"></canvas>
+
+
+                    <!-- Arrow navigation buttons -->
+                    <div class="bathroom-navigation">
+
+                        <button *ngIf="!isShowerMode" class="arrow-button left" [disabled]="isDead"
+                            (click)="enterBathroom()">
+                            <!-- <span class="arrow-text">Visit Bathroom</span> -->
+                            <img src="assets/left-arrow.png" alt="Left Arrow" class="arrow-icon" />
+                        </button>
+
+                        <button *ngIf="isShowerMode" class="arrow-button right" [disabled]="isDead"
+                            (click)="leaveBathroom()">
+                            <img src="assets/right-arrow.png" alt="Right Arrow" class="arrow-icon" />
+                            <!-- <span class="arrow-text">Leave Bathroom</span> -->
+                        </button>
+                    </div>
+
+
                 </div>
 
-                <div class="status-bar">
-                    <div class="bar-label">Cleanliness</div>
-                    <div class="bar-wrapper">
-                        <div class="bar-fill cleanliness" [style.width.%]="cleanliness">
-                            <span class="bar-label-inside" *ngIf="cleanliness > 0">{{ cleanliness }}%</span>
+                <div class="console-bottom">
+                    <div class="btn-dpad" (click)="killPet()">
+                        <div class="dpad-up"></div>
+                        <div class="dpad-down"></div>
+                        <div class="dpad-left"></div>
+                        <div class="dpad-right"></div>
+                        <div class="dpad-center"></div>
+                    </div>
+                    <div class="speaker-grille">
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+                    <!-- <button class="btn-bathroom" *ngIf="!isShowerMode" [disabled]="isDead"
+                        (click)="enterBathroom()">Visit
+                        Bathroom</button>
+                    <button class="btn-bathroom" *ngIf="isShowerMode" [disabled]="isDead"
+                        (click)="leaveBathroom()">Leave
+                        Bathroom</button> -->
+
+                    <div>
+                        <!-- <p id="branding" [class.smooth-glow]="loadingScreenOn">BUTTON MASHER</p> -->
+                        <div>
+                            <input id="digipetName" class="form-control" type="text" placeholder="name your pet">
                         </div>
                     </div>
-                </div>
 
+                    <div class="speaker-grille">
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+
+                    <div id="mainBtn" class="btn btn-circle mx-2" (click)="toggleShowerHead()" [class.disabled]="isDead"
+                        [attr.aria-disabled]="isDead ? true : null" [style.pointerEvents]="isDead ? 'none' : 'auto'">
+                    </div>
+
+                </div>
             </div>
 
         </div>
@@ -56,7 +132,7 @@
         </button> -->
     </div>
 
-    <div id="menus" *ngIf="!isDead; else deadFoodMenu">
+    <div id="menus" *ngIf="!isDead && !isShowerMode">
         <div class="menu-container">
             <h6>Food Menu</h6>
             <div class="menu-grid">
@@ -85,13 +161,15 @@
 
     </div>
 
-    <ng-template #deadFoodMenu>
-        <div class="menu-item disabled revive-item">
-            <img src="assets/potion.png" alt="Revive" (click)="revivePet()" />
-            <div class="item-details">
-                <div class="item-value">Revive</div>
+    <ng-template #deadMenu>
+        <ng-container *ngIf="!isShowerMode">
+            <div id="revive-item" class="menu-item disabled">
+                <img src="assets/potion.png" alt="Revive" (click)="revivePet()" />
+                <div class="item-details">
+                    <div class="item-value">Revive</div>
+                </div>
             </div>
-        </div>
+        </ng-container>
     </ng-template>
 
 </div>
