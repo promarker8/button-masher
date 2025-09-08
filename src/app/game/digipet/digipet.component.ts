@@ -135,27 +135,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
 
               this.loadPetImages(() => {
                 this.drawPet('happy');
-
-                this.hungerInterval = window.setInterval(() => {
-                  if (!this.isShowerMode && !this.isDead) {
-                    this.hunger = Math.max(0, Math.min(this.hunger - 9, 100));
-                    this.updatePetMood();
-                  }
-                }, 2000);
-
-                this.boredomInterval = window.setInterval(() => {
-                  if (!this.isShowerMode && !this.isDead) {
-                    this.boredom = Math.max(0, Math.min(this.boredom - 7, 100));
-                    this.updatePetMood();
-                  }
-                }, 2800);
-
-                this.cleanlinessInterval = window.setInterval(() => {
-                  if (!this.isDead) {
-                    this.cleanliness = Math.max(0, Math.min(this.cleanliness - 7, 100));
-                    this.updatePetMood();
-                  }
-                }, 4000);
+                this.startAllStats();
               });
             }, 1300);
           }, 1000);
@@ -364,25 +344,31 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   applyEffect(effect: PetEffect) {
+    if (this.isDead) return;
+
     if (effect.hungerChange) {
+      clearInterval(this.hungerInterval);
       this.hunger = Math.max(0, Math.min(100, this.hunger + effect.hungerChange));
+      this.resumeSingleStat("hunger");
     }
     if (effect.boredomChange) {
+      clearInterval(this.boredomInterval);
       this.boredom = Math.max(0, Math.min(100, this.boredom + effect.boredomChange));
+      this.resumeSingleStat("boredom");
     }
-    if (effect.speech) {
-      this.speechText = effect.speech;
-      setTimeout(() => {
-        this.speechText = '';
-        this.drawPet(this.currentMood);
-      }, 2000);
-    }
+    // if (effect.speech) {
+    //   this.speechText = effect.speech;
+    //   setTimeout(() => {
+    //     this.speechText = '';
+    //     this.drawPet(this.currentMood);
+    //   }, 1500);
+    // }
 
     this.updatePetMood();
   }
 
   enterBathroom() {
-    this.pauseGameStats();
+    this.pauseLivingRoomStats();
     this.isShowerMode = true;
     this.backgroundImage.src = 'assets/bathroom-base.png';
     this.backgroundImage.onload = () => {
@@ -469,13 +455,43 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     // this.drawShowerButton();
   }
 
-  pauseGameStats() {
+  private startAllStats() {
+    this.hungerInterval = window.setInterval(() => {
+      if (!this.isShowerMode && !this.isDead) {
+        this.hunger = Math.max(0, this.hunger - 9);
+        this.updatePetMood();
+      }
+    }, 2000);
+
+    this.boredomInterval = window.setInterval(() => {
+      if (!this.isShowerMode && !this.isDead) {
+        this.boredom = Math.max(0, this.boredom - 7);
+        this.updatePetMood();
+      }
+    }, 2800);
+
+    this.cleanlinessInterval = window.setInterval(() => {
+      if (!this.isDead) {
+        this.cleanliness = Math.max(0, this.cleanliness - 7);
+        this.updatePetMood();
+      }
+    }, 4000);
+  }
+
+  private pauseAllStats() {
+    this.paused = true;
+    clearInterval(this.hungerInterval);
+    clearInterval(this.boredomInterval);
+    clearInterval(this.cleanliness);
+  }
+
+  private pauseLivingRoomStats() {
     this.paused = true;
     clearInterval(this.hungerInterval);
     clearInterval(this.boredomInterval);
   }
 
-  resumeGameStats() {
+  private resumeLivingRoomStats() {
     this.paused = false;
 
     this.hungerInterval = window.setInterval(() => {
@@ -487,6 +503,24 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       this.boredom = Math.max(0, Math.min(this.boredom - 7, 100));
       this.updatePetMood();
     }, 2800);
+  }
+
+  private resumeSingleStat(stat: String) {
+    this.paused = false;
+
+    if (stat == "hunger") {
+      this.hungerInterval = window.setInterval(() => {
+        this.hunger = Math.max(0, Math.min(this.hunger - 9, 100));
+        this.updatePetMood();
+      }, 2000);
+    }
+    else if (stat == "boredom") {
+
+      this.boredomInterval = window.setInterval(() => {
+        this.boredom = Math.max(0, Math.min(this.boredom - 7, 100));
+        this.updatePetMood();
+      }, 2800);
+    }
   }
 
   leaveBathroom() {
@@ -501,7 +535,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     if (showerButton) {
       showerButton.classList.remove('glowing');
     }
-    this.resumeGameStats();
+    this.resumeLivingRoomStats();
   }
 
   startWaterAnimation() {
@@ -588,6 +622,8 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   revivePet() {
+    this.pauseAllStats();
+
     this.hunger = 100;
     this.boredom = 100;
     this.cleanliness = 100;
@@ -595,9 +631,12 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     this.isDead = false;
     this.drawPet('happy');
     this.speechText = "I'm back!";
+
     setTimeout(() => {
       this.speechText = "";
       this.drawPet('happy');
+
+      this.startAllStats();
     }, 2500);
   }
 
