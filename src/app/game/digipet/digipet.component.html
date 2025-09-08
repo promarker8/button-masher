@@ -1,4 +1,4 @@
-<div class="container mt-4 d-flex flex-column justify-content-center align-items-center">
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center">
 
     <div class="d-flex flex-column justify-content-center align-items-center">
 
@@ -163,8 +163,8 @@
 
     <ng-template #deadMenu>
         <ng-container *ngIf="!isShowerMode">
-            <div id="revive-item" class="menu-item disabled">
-                <img src="assets/potion.png" alt="Revive" (click)="revivePet()" />
+            <div id="revive-item" class="menu-item disabled" (click)="revivePet()">
+                <img src="assets/potion.png" alt="Revive" />
                 <div class="item-details">
                     <div class="item-value">Revive</div>
                 </div>

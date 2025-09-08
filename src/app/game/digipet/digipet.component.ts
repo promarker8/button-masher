@@ -515,11 +515,18 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       }, 2000);
     }
     else if (stat == "boredom") {
-
       this.boredomInterval = window.setInterval(() => {
         this.boredom = Math.max(0, Math.min(this.boredom - 7, 100));
         this.updatePetMood();
       }, 2800);
+    }
+    else if (stat == "cleanliness") {
+      this.cleanlinessInterval = window.setInterval(() => {
+        if (!this.isDead) {
+          this.cleanliness = Math.max(0, this.cleanliness - 7);
+          this.updatePetMood();
+        }
+      }, 4000);
     }
   }
 
@@ -613,12 +620,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
 
     this.waterDroplets = [];
 
-    this.cleanlinessInterval = window.setInterval(() => {
-      if (!this.isDead) {
-        this.cleanliness = Math.max(0, Math.min(this.cleanliness - 8, 100));
-        this.updatePetMood();
-      }
-    }, 4000);
+    this.resumeSingleStat("cleanliness");
   }
 
   revivePet() {
@@ -631,6 +633,10 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     this.isDead = false;
     this.drawPet('happy');
     this.speechText = "I'm back!";
+
+    clearInterval(this.hungerInterval);
+    clearInterval(this.boredomInterval);
+    clearInterval(this.cleanlinessInterval);
 
     setTimeout(() => {
       this.speechText = "";
