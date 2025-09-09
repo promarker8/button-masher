@@ -30,6 +30,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   private backgroundImage: HTMLImageElement = new Image();
   private paused = false;
   loadingScreenOn = true;
+  showGlitch = false;
 
   petStatus: string = 'Happy';
   hunger = 100; // 0 to 100
@@ -384,6 +385,10 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   enterBathroom() {
     if (this.isDead) return;
 
+    this.triggerGlitchEffect(() => {
+      this.isShowerMode = true;
+    });
+
     this.pauseLivingRoomStats();
     this.menuOpenFood = false;
     this.menuOpenToy = false;
@@ -394,6 +399,18 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       this.updateShowerButtonGlow();
       // this.drawShowerButton();
     };
+  }
+
+  triggerGlitchEffect(callback: () => void) {
+    this.showGlitch = true;
+
+    setTimeout(() => {
+      callback();
+    }, 300);
+
+    setTimeout(() => {
+      this.showGlitch = false;
+    }, 700);
   }
 
   updateShowerButtonGlow() {
@@ -591,6 +608,10 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
 
   leaveBathroom() {
     if (this.isDead) return;
+
+    this.triggerGlitchEffect(() => {
+      this.isShowerMode = false;
+    });
 
     this.isShowerMode = false;
     this.stopWaterAnimation();
@@ -808,7 +829,10 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   cycleCurrentMenuSelection(forward: boolean = true) {
-    if (this.menuOpenFood) {
+    if (!this.menuOpenFood && !this.menuOpenToy) {
+      this.animateButtons();
+    }
+    else if (this.menuOpenFood) {
       this.cycleFoodSelection(forward);
     } else if (this.menuOpenToy) {
       this.cycleToySelection(forward);

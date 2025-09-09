@@ -14,6 +14,7 @@
                 </div>
 
                 <div class="console-screen">
+                    <!-- start up -->
                     <div class="screen-overlay" id="screenOverlay"></div>
 
                     <!-- when dead -->
@@ -23,6 +24,9 @@
 
                     <!-- when sleeping -->
                     <div class="dark-overlay" *ngIf="isSleeping"></div>
+
+                    <!-- Glitch Effect Overlay -->
+                    <div class="glitch-overlay" *ngIf="showGlitch"></div>
 
                     <!-- back to rest of game -->
                     <div class="room-sign" *ngIf="!isShowerMode">Living Room</div>
@@ -67,7 +71,7 @@
                     <canvas #canvas width="900" height="500"></canvas>
 
                     <!-- light switch -->
-                    <div class="sleep-toggle" (click)="toggleSleep()">
+                    <div *ngIf="!isShowerMode" class="sleep-toggle" (click)="toggleSleep()">
                         <img [src]="isSleeping ? 'assets/switch_off.png' : 'assets/switch_on.png'" alt="light-switch">
                     </div>
 
@@ -89,7 +93,7 @@
 
                     <div *ngIf="!isShowerMode && !isSleeping" class="circle-menu-container toy-menu">
                         <!-- Main Circle -->
-                        <div class="main-circle" (click)=" toggleToyMenu()">
+                        <div class="main-circle" (click)="toggleToyMenu()">
                             <div>TOY<br>MENU</div>
                         </div>
 
