@@ -21,6 +21,9 @@
                         <ng-template [ngTemplateOutlet]="deadMenu"></ng-template>
                     </div>
 
+                    <!-- when sleeping -->
+                    <div class="dark-overlay" *ngIf="isSleeping"></div>
+
                     <!-- back to rest of game -->
                     <div class="room-sign" *ngIf="!isShowerMode">Living Room</div>
                     <div class="room-sign bathroom" *ngIf="isShowerMode">Bathroom</div>
@@ -63,32 +66,71 @@
 
                     <canvas #canvas width="900" height="500"></canvas>
 
+                    <!-- light switch -->
+                    <div class="sleep-toggle" (click)="toggleSleep()">
+                        <img [src]="isSleeping ? 'assets/switch_off.png' : 'assets/switch_on.png'" alt="light-switch">
+                    </div>
 
                     <!-- Arrow navigation buttons -->
-                    <div class="bathroom-navigation">
+                    <div *ngIf="!isSleeping" class="bathroom-navigation">
 
-                        <button *ngIf="!isShowerMode" class="arrow-button left" [disabled]="isDead"
-                            (click)="enterBathroom()">
+                        <button *ngIf="!isShowerMode" class="arrow-button left" [disabled]="isDead">
                             <!-- <span class="arrow-text">Visit Bathroom</span> -->
-                            <img src="assets/left-arrow.png" alt="Left Arrow" class="arrow-icon" />
+                            <img src="assets/left-arrow.png" alt="Left Arrow" class="arrow-icon"
+                                (click)="enterBathroom()" />
                         </button>
 
-                        <button *ngIf="isShowerMode" class="arrow-button right" [disabled]="isDead"
-                            (click)="leaveBathroom()">
-                            <img src="assets/right-arrow.png" alt="Right Arrow" class="arrow-icon" />
+                        <button *ngIf="isShowerMode" class="arrow-button right" [disabled]="isDead">
+                            <img src="assets/right-arrow.png" alt="Right Arrow" class="arrow-icon"
+                                (click)="leaveBathroom()" />
                             <!-- <span class="arrow-text">Leave Bathroom</span> -->
                         </button>
                     </div>
 
+                    <div *ngIf="!isShowerMode && !isSleeping" class="circle-menu-container toy-menu">
+                        <!-- Main Circle -->
+                        <div class="main-circle" (click)=" toggleToyMenu()">
+                            <div>TOY<br>MENU</div>
+                        </div>
+
+                        <!-- Menu -->
+                        <div *ngFor="let toy of toyItems; let i = index" class="menu-circle"
+                            [ngStyle]="getCircleStyle(i, menuOpenToy, +50)" [ngClass]="{'visible': menuOpenToy,
+                            'selected-circle': menuOpenToy && i === selectedToyIndex}"
+                            (click)="selectToy(i); applyEffect(toy.effect);">
+                            <img [src]="'assets/' + toy.id + '.png'" [alt]="toy.name" />
+                            <div class="item-details">
+                                <div class="item-value">{{ toy.valueLabel }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!isShowerMode && !isSleeping" class="circle-menu-container food-menu">
+                        <!-- Main Circle -->
+                        <div class="main-circle" (click)=" toggleFoodMenu()">
+                            <div>FOOD<br>MENU</div>
+                        </div>
+
+                        <!-- Menu -->
+                        <div *ngFor="let food of foodItems; let i = index" class="menu-circle"
+                            [ngStyle]="getCircleStyle(i, menuOpenFood, -30)" [ngClass]="{ 'visible': menuOpenFood,
+                            'selected-circle': menuOpenFood && i === selectedFoodIndex}"
+                            (click)="selectFood(i); applyEffect(food.effect);">
+                            <img [src]="'assets/' + food.id + '.png'" [alt]="food.name" />
+                            <div class="item-details">
+                                <div class="item-value">{{ food.valueLabel }}</div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
                 <div class="console-bottom">
-                    <div class="btn-dpad" (click)="killPet()">
-                        <div class="dpad-up"></div>
-                        <div class="dpad-down"></div>
-                        <div class="dpad-left"></div>
-                        <div class="dpad-right"></div>
+                    <div class="btn-dpad">
+                        <div class="dpad-up" (click)="cycleCurrentMenuSelection(false)"></div>
+                        <div class="dpad-down" (click)="cycleCurrentMenuSelection(true)"></div>
+                        <div class="dpad-left" (click)="cycleCurrentMenuSelection(false)"></div>
+                        <div class="dpad-right" (click)="cycleCurrentMenuSelection(true)"></div>
                         <div class="dpad-center"></div>
                     </div>
                     <div class="speaker-grille">
@@ -112,7 +154,7 @@
                         <span></span><span></span><span></span><span></span>
                     </div>
 
-                    <div id="mainBtn" class="btn btn-circle mx-2" (click)="toggleShowerHead()" [class.disabled]="isDead"
+                    <div id="mainBtn" class="btn btn-circle mx-2" (click)="toggleMainButton()" [class.disabled]="isDead"
                         [attr.aria-disabled]="isDead ? true : null" [style.pointerEvents]="isDead ? 'none' : 'auto'">
                     </div>
 
@@ -132,14 +174,13 @@
         </button> -->
     </div>
 
-    <div id="menus" *ngIf="!isDead && !isShowerMode">
+    <!-- <div id="menus" *ngIf="!isDead && !isShowerMode">
         <div class="menu-container">
             <h6>Food Menu</h6>
             <div class="menu-grid">
                 <div *ngFor="let food of foodItems" class="menu-item" (click)="applyEffect(food.effect)">
                     <img [src]="'assets/' + food.id + '.png'" [alt]="food.name" />
                     <div class="item-details">
-                        <!-- <div class="item-name">{{ food.name }}</div> -->
                         <div class="item-value">{{ food.valueLabel }}</div>
                     </div>
                 </div>
@@ -152,14 +193,14 @@
                 <div *ngFor="let toy of toyItems" class="menu-item" (click)="applyEffect(toy.effect)">
                     <img [src]="'assets/' + toy.id + '.png'" [alt]="toy.name" />
                     <div class="item-details">
-                        <!-- <div class="item-name">{{ toy.name }}</div> -->
                         <div class="item-value">{{ toy.valueLabel }}</div>
                     </div>
                 </div>
             </div>
         </div>
 
-    </div>
+
+    </div> -->
 
     <ng-template #deadMenu>
         <ng-container *ngIf="!isShowerMode">

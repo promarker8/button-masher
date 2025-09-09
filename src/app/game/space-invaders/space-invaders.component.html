@@ -1,1 +1,17 @@
-<canvas #gameCanvas></canvas>
+<div class="game-container" [style.width.px]="gameWidth" [style.height.px]="gameHeight">
+    <!-- Player -->
+    <img src="assets/chef.png" class="player" [style.left.px]="playerX" [style.bottom.px]="20" />
+
+    <!-- Bullets -->
+    <ng-container *ngFor="let bullet of bullets">
+        <img *ngIf="bullet.active" src="assets/whisk.png" class="bullet" [style.left.px]="bullet.x"
+            [style.bottom.px]="gameHeight - bullet.y" />
+    </ng-container>
+
+    <!-- Enemies -->
+    <ng-container *ngFor="let enemy of enemies">
+        <img *ngIf="enemy.active" src="assets/eggplant.svg" class="enemy" [style.left.px]="enemy.x"
+            [style.top.px]="enemy.y" />
+    </ng-container>
+
+</div>

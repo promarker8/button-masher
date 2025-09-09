@@ -280,6 +280,7 @@
         font-size: 14px;
         padding: 6px 14px 4px 14px;
         border-radius: 8px;
+        border: 2px solid #a0b48c;
         box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
         /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
         user-select: none;
@@ -287,7 +288,6 @@
         text-transform: uppercase;
         pointer-events: none;
         z-index: 10;
-        border: 2px solid #a0b48c;
         transition: background 0.3s ease;
     }
 
@@ -617,7 +617,7 @@
 
         background-image: repeating-linear-gradient(to bottom,
                 rgba(0, 0, 0, 0.05),
-                rgba(0, 0, 0, 0.05) 0.05em,
+                rgba(36, 36, 36, 0.05) 0.05em,
                 transparent 0.05em,
                 transparent 0.1em);
 
@@ -658,6 +658,40 @@
         height: 4px;
         background-color: rgb(235, 230, 230);
         animation: gameboyStartup 1.2s ease-out forwards;
+    }
+
+    .screen-overlay::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        background-image: repeating-linear-gradient(to bottom,
+                rgba(113, 9, 9, 0.411),
+                rgba(36, 36, 36, 0.382) 0.05em,
+                transparent 0.05em,
+                transparent 0.1em);
+
+        pointer-events: none;
+        z-index: 25;
+        mix-blend-mode: multiply;
+        border-radius: inherit;
+    }
+
+    .dark-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 18;
+        overflow: hidden;
     }
 
     @keyframes gameboyStartup {
@@ -1118,5 +1152,228 @@
             height: 50px;
             object-fit: contain;
             margin-bottom: 8px;
+        }
+    }
+
+    .circle-menu-container {
+        /* position: relative; */
+        width: 200px;
+        height: 200px;
+    }
+
+    .toy-menu {
+        position: absolute;
+        top: -5px;
+        right: 270px;
+
+        & .main-circle {
+            top: 48px;
+            left: 64px;
+            background: #f9fbff;
+            color: #6389ec;
+            border: 2px solid #6389ec;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    .food-menu {
+        position: absolute;
+        bottom: 10px;
+        right: -28px;
+
+        & .main-circle {
+            top: 64px;
+            left: 60px;
+            background: #fdedf7;
+            color: #f078c6;
+            border: 2px solid #f078c6;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    .main-circle {
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        text-align: center;
+        margin-top: 2px;
+        font-weight: 600;
+        position: absolute;
+        /* top: 60px;
+        left: 60px; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 8;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s;
+
+        img {
+            width: 50%;
+        }
+
+        &:hover {
+            transform: scale(1.04);
+        }
+    }
+
+    .menu-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #fff;
+        position: absolute;
+        top: 70px;
+        right: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        cursor: pointer;
+        transition: transform 0.4s, opacity 0.4s ease;
+
+        img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        span {
+            font-size: 10px;
+            margin-top: 4px;
+            color: #333;
+        }
+
+        &.visible {
+            pointer-events: auto;
+        }
+    }
+
+
+    @media (max-width: 1099px) {
+        .main-circle {
+            width: 65px;
+            height: 65px;
+            font-size: 0.85rem;
+        }
+
+        .menu-circle {
+            width: 50px;
+            height: 50px;
+            top: 65px;
+            right: 70px;
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
+
+            .item-details {
+                font-size: 9px;
+            }
+        }
+
+        .toy-menu {
+            right: 265px;
+
+            & .main-circle {
+                top: 48px;
+                left: 80px;
+            }
+        }
+
+        .food-menu {
+            right: -30px;
+            bottom: -17px;
+
+            & .main-circle {
+                top: 60px;
+                left: 80px;
+            }
+        }
+    }
+
+    @media (max-width: 899px) {
+        .main-circle {
+            width: 50px;
+            height: 50px;
+            font-size: 0.75rem;
+        }
+
+        .menu-circle {
+            width: 40px;
+            height: 40px;
+            top: 60px;
+            right: 60px;
+
+            img {
+                width: 18px;
+                height: 18px;
+            }
+
+            .item-details {
+                font-size: 8px;
+            }
+        }
+
+        .toy-menu {
+            right: 40%;
+            top: -14px;
+
+            & .main-circle {
+                top: 50px;
+                left: 98px;
+            }
+        }
+
+        .food-menu {
+            right: -25px;
+            bottom: -10%;
+
+            & .main-circle {
+                top: 55px;
+                left: 98px;
+            }
+        }
+    }
+
+    .selected-circle {
+        outline: 3px solid #ffe155;
+        outline-offset: 2px;
+        box-shadow: 0px -1px 13px 4px #ffe055d1;
+    }
+
+    @keyframes swell-animation {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .swell-animation {
+        animation: swell-animation 0.7s ease-in-out;
+    }
+
+    .sleep-toggle {
+        position: absolute;
+        top: 45px;
+        left: 180px;
+        padding: 6px;
+        z-index: 19;
+        cursor: pointer;
+
+        & img {
+            width: 32px;
+            box-shadow: -6px 0px 8px rgba(0, 0, 0, 0.15);
+            border-radius: 2px;
         }
     }

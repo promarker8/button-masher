@@ -1,0 +1,27 @@
+.game-container {
+    position: relative;
+    background-color: #fff2cc;
+    /* Pale warm yellow */
+    border: 4px solid #ccc;
+    overflow: hidden;
+}
+
+.player {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+}
+
+.bullet {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.05s linear;
+}
+
+.enemy {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.1s linear;
+}

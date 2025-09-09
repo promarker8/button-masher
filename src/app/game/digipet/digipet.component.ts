@@ -55,12 +55,17 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   private showerCleaningInterval!: number;
 
   isDead: boolean = false;
+  isSleeping: boolean = false;
 
   private petImages: { [key: string]: HTMLImageElement } = {};
   private currentMood: 'happy' | 'worried' | 'sad' | 'hungry' | 'dead' = 'happy';
 
   currentFoodIndex = 0;
   currentToyIndex = 0;
+  selectedFoodIndex: number = 0;
+  selectedToyIndex: number = 0;
+  menuOpenFood = false;
+  menuOpenToy = false;
   // foodItems: string[] = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'];
   // toyItems: string[] = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8'];
 
@@ -163,7 +168,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     const isWithinButton = x >= bx && x <= bx + width && y >= by && y <= by + height;
 
     if (isWithinButton && this.isShowerMode) {
-      this.toggleShowerHead();
+      this.toggleMainButton();
     }
   }
 
@@ -269,6 +274,8 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       this.petStatus = 'Dead';
       this.drawPet('dead');
       this.speechText = '';
+      this.menuOpenFood = false;
+      this.menuOpenToy = false;
       return;
     }
 
@@ -297,11 +304,13 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     }
 
     if (petHasDied) {
-      console.log("Pet is dead");
+      console.log("Killing pet due to 0-0-0 stats");
       this.petStatus = 'Dead';
       this.drawPet('dead');
       this.isDead = true;
       this.speechText = '';
+      this.menuOpenFood = false;
+      this.menuOpenToy = false;
     } else if (isDying) {
       console.log("Pet is dyinggg");
       this.petStatus = 'Dying';
@@ -343,8 +352,13 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     return `assets/${this.toyItems[this.currentToyIndex]}.png`;
   }
 
+  private lastEffectTime = 0;
+  private effectCooldown = 200;
+
   applyEffect(effect: PetEffect) {
-    if (this.isDead) return;
+    const now = Date.now();
+    if (this.isDead || now - this.lastEffectTime < this.effectCooldown) return;
+    this.lastEffectTime = now;
 
     if (effect.hungerChange) {
       clearInterval(this.hungerInterval);
@@ -368,7 +382,11 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   enterBathroom() {
+    if (this.isDead) return;
+
     this.pauseLivingRoomStats();
+    this.menuOpenFood = false;
+    this.menuOpenToy = false;
     this.isShowerMode = true;
     this.backgroundImage.src = 'assets/bathroom-base.png';
     this.backgroundImage.onload = () => {
@@ -385,56 +403,89 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private drawShowerButton() {
-    const ctx = this.ctx;
-    const { x, y, width, height } = this.showerButton;
+  // private drawShowerButton() {
+  //   const ctx = this.ctx;
+  //   const { x, y, width, height } = this.showerButton;
 
-    const pastelBlue = '#aee2ff';
-    const pastelRed = '#ffc6c6';
+  //   const pastelBlue = '#aee2ff';
+  //   const pastelRed = '#ffc6c6';
 
-    const bgColor = this.isWaterRunning ? pastelRed : pastelBlue;
-    const text = this.isWaterRunning ? 'OFF' : 'ON';
+  //   const bgColor = this.isWaterRunning ? pastelRed : pastelBlue;
+  //   const text = this.isWaterRunning ? 'OFF' : 'ON';
 
-    ctx.beginPath();
-    ctx.roundRect(x, y, width, height, 10);
-    ctx.fillStyle = bgColor;
-    ctx.fill();
+  //   ctx.beginPath();
+  //   ctx.roundRect(x, y, width, height, 10);
+  //   ctx.fillStyle = bgColor;
+  //   ctx.fill();
 
-    ctx.strokeStyle = '#5d7435ff';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
-    ctx.shadowBlur = 4;
-    ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 2;
+  //   ctx.strokeStyle = '#5d7435ff';
+  //   ctx.lineWidth = 3;
+  //   ctx.stroke();
+  //   ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+  //   ctx.shadowBlur = 4;
+  //   ctx.shadowOffsetX = 2;
+  //   ctx.shadowOffsetY = 2;
 
-    ctx.shadowColor = 'transparent';
-    ctx.fillStyle = '#1e2b05ff';
-    ctx.font = '12px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(text, x + width / 2, y + height / 2 + 2);
+  //   ctx.shadowColor = 'transparent';
+  //   ctx.fillStyle = '#1e2b05ff';
+  //   ctx.font = '12px Arial';
+  //   ctx.textAlign = 'center';
+  //   ctx.textBaseline = 'middle';
+  //   ctx.fillText(text, x + width / 2, y + height / 2 + 2);
+  // }
+
+  highlightMenuCircles() {
+    const menuCircles = document.querySelectorAll('.main-circle');
+
+    menuCircles.forEach((el: Element) => {
+      el.classList.add('glowing-box-shadow', 'glowing-box-shadow-animate');
+
+      setTimeout(() => {
+        el.classList.remove('glowing-box-shadow-animate');
+        el.classList.remove('glowing-box-shadow');
+      }, 600);
+    });
   }
 
-  toggleShowerHead() {
+  animateButtons() {
+    const buttons = document.querySelectorAll('.main-circle');
+
+    buttons.forEach(button => {
+      button.classList.add('swell-animation');
+
+      setTimeout(() => {
+        button.classList.remove('swell-animation');
+      }, 700);
+    });
+  }
+
+  toggleMainButton() {
     if (!this.isShowerMode) {
 
-      const menuGrid = document.querySelector('.menu-grid');
+      // const menuGrid = document.querySelector('.main-circle');
 
-      if (menuGrid) {
-        menuGrid.scrollIntoView({
-          behavior: 'smooth',
-          block: 'end'
-        });
+      // if (menuGrid) {
+      //   menuGrid.scrollIntoView({
+      //     behavior: 'smooth',
+      //     block: 'end'
+      //   });
 
-        const menuItems = document.querySelectorAll('.menu-grid');
-        menuItems.forEach(item => {
-          item.classList.add('glowing-box-shadow');
+      //   const menuItems = document.querySelectorAll('.main-circle');
+      //   menuItems.forEach(item => {
+      //     item.classList.add('glowing-box-shadow');
 
-          setTimeout(() => {
-            item.classList.remove('glowing-box-shadow');
-          }, 400);
-        });
+      //     setTimeout(() => {
+      //       item.classList.remove('glowing-box-shadow');
+      //     }, 400);
+      //   });
+      // }
+
+      if (!this.menuOpenFood && !this.menuOpenToy) {
+        this.animateButtons();
+      }
+
+      else {
+        this.selectCurrentMenuItem();
       }
 
       return;
@@ -456,16 +507,18 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   private startAllStats() {
+    this.pauseAllStats();
+
     this.hungerInterval = window.setInterval(() => {
       if (!this.isShowerMode && !this.isDead) {
         this.hunger = Math.max(0, this.hunger - 9);
         this.updatePetMood();
       }
-    }, 2000);
+    }, 2300);
 
     this.boredomInterval = window.setInterval(() => {
       if (!this.isShowerMode && !this.isDead) {
-        this.boredom = Math.max(0, this.boredom - 7);
+        this.boredom = Math.max(0, this.boredom - 6);
         this.updatePetMood();
       }
     }, 2800);
@@ -482,7 +535,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     this.paused = true;
     clearInterval(this.hungerInterval);
     clearInterval(this.boredomInterval);
-    clearInterval(this.cleanliness);
+    clearInterval(this.cleanlinessInterval);
   }
 
   private pauseLivingRoomStats() {
@@ -493,6 +546,9 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
 
   private resumeLivingRoomStats() {
     this.paused = false;
+
+    clearInterval(this.hungerInterval);
+    clearInterval(this.boredomInterval);
 
     this.hungerInterval = window.setInterval(() => {
       this.hunger = Math.max(0, Math.min(this.hunger - 9, 100));
@@ -509,21 +565,24 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     this.paused = false;
 
     if (stat == "hunger") {
+      clearInterval(this.hungerInterval);
       this.hungerInterval = window.setInterval(() => {
         this.hunger = Math.max(0, Math.min(this.hunger - 9, 100));
         this.updatePetMood();
       }, 2000);
     }
     else if (stat == "boredom") {
+      clearInterval(this.boredomInterval);
       this.boredomInterval = window.setInterval(() => {
         this.boredom = Math.max(0, Math.min(this.boredom - 7, 100));
         this.updatePetMood();
       }, 2800);
     }
     else if (stat == "cleanliness") {
+      clearInterval(this.cleanlinessInterval);
       this.cleanlinessInterval = window.setInterval(() => {
         if (!this.isDead) {
-          this.cleanliness = Math.max(0, this.cleanliness - 7);
+          this.cleanliness = Math.max(0, this.cleanliness - 6);
           this.updatePetMood();
         }
       }, 4000);
@@ -531,6 +590,8 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   leaveBathroom() {
+    if (this.isDead) return;
+
     this.isShowerMode = false;
     this.stopWaterAnimation();
     clearInterval(this.showerInterval);
@@ -570,10 +631,8 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
     }, 50);
 
     this.showerCleaningInterval = window.setInterval(() => {
-      if (this.cleanliness > 0) {
-        this.cleanliness = Math.max(0, Math.min(this.cleanliness + 4, 100));
-        this.updatePetMood();
-      }
+      this.cleanliness = Math.max(0, Math.min(this.cleanliness + 4, 100));
+      this.updatePetMood();
     }, 1000);
 
     const animate = () => {
@@ -644,6 +703,178 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
 
       this.startAllStats();
     }, 2500);
+  }
+
+  toggleToyMenu() {
+    this.menuOpenToy = !this.menuOpenToy;
+    if (this.menuOpenToy) {
+      this.menuOpenFood = false;
+      this.selectedToyIndex = 0;
+    }
+  }
+
+  toggleFoodMenu() {
+    this.menuOpenFood = !this.menuOpenFood;
+    if (this.menuOpenFood) {
+      this.menuOpenToy = false;
+      this.selectedFoodIndex = 0;
+    }
+  }
+
+  openBothMenus() {
+    this.menuOpenFood = true;
+    this.menuOpenToy = true;
+  }
+
+  getResponsiveRowSettings(): { count: number; radius: number; spread: number }[] {
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth < 900) {
+      // Small screen
+      return [
+        { count: 4, radius: 50, spread: 155 },
+        { count: 4, radius: 90, spread: 85 },
+      ];
+    } else if (screenWidth < 1100) {
+      // Medium screen
+      return [
+        { count: 4, radius: 65, spread: 155 },
+        { count: 4, radius: 120, spread: 90 },
+      ];
+    }
+
+    // Large screen
+    return [
+      { count: 4, radius: 75, spread: 170 },
+      { count: 4, radius: 140, spread: 100 },
+    ];
+  }
+
+  getCircleStyle(index: number, isOpen: boolean, rotationOffset = 0): any {
+    if (!isOpen) {
+      return {
+        transform: 'translate(0, 0)',
+        opacity: 0,
+        transitionDelay: `${index * 50}ms`
+      };
+    }
+
+    const rowSettings = this.getResponsiveRowSettings();
+
+    let totalIndex = 0;
+    for (let row = 0; row < rowSettings.length; row++) {
+      const { count, radius, spread } = rowSettings[row];
+      if (index < totalIndex + count) {
+        const localIndex = index - totalIndex;
+        const startAngle = -spread / 2;
+        const angleDeg = startAngle + (localIndex / (count - 1)) * spread + rotationOffset;
+        const angleRad = (angleDeg * Math.PI) / 180;
+
+        const x = -radius * Math.cos(angleRad);
+        const y = radius * Math.sin(angleRad);
+
+        return {
+          transform: `translate(${x}px, ${y}px)`,
+          opacity: 1,
+          transitionDelay: `${index * 100}ms`
+        };
+      }
+      totalIndex += count;
+    }
+
+    return {};
+  }
+
+  cycleFoodSelection(forward: boolean = true) {
+    const itemCount = this.foodItems.length;
+    if (!this.menuOpenFood || itemCount === 0) return;
+
+    if (forward) {
+      this.selectedFoodIndex = (this.selectedFoodIndex + 1) % itemCount;
+    } else {
+      this.selectedFoodIndex = (this.selectedFoodIndex - 1 + itemCount) % itemCount;
+    }
+  }
+
+  cycleToySelection(forward: boolean = true) {
+    const itemCount = this.toyItems.length;
+    if (!this.menuOpenToy || itemCount === 0) return;
+
+    if (forward) {
+      this.selectedToyIndex = (this.selectedToyIndex + 1) % itemCount;
+    } else {
+      this.selectedToyIndex = (this.selectedToyIndex - 1 + itemCount) % itemCount;
+    }
+  }
+
+  cycleCurrentMenuSelection(forward: boolean = true) {
+    if (this.menuOpenFood) {
+      this.cycleFoodSelection(forward);
+    } else if (this.menuOpenToy) {
+      this.cycleToySelection(forward);
+    }
+  }
+
+  selectCurrentMenuItem() {
+    if (this.menuOpenFood) {
+      const selectedFood = this.foodItems[this.selectedFoodIndex];
+      this.applyEffect(selectedFood.effect);
+    } else if (this.menuOpenToy) {
+      const selectedToy = this.toyItems[this.selectedToyIndex];
+      this.applyEffect(selectedToy.effect);
+    }
+  }
+
+  selectToy(index: number): void {
+    this.selectedToyIndex = index;
+  }
+
+  selectFood(index: number): void {
+    this.selectedFoodIndex = index;
+  }
+
+  toggleSleep() {
+    console.log("sleep")
+    this.isSleeping = !this.isSleeping;
+
+    if (this.isSleeping) {
+      this.pauseAllStats();
+      this.speechText = '';
+      this.menuOpenFood = false;
+      this.menuOpenToy = false;
+
+      this.drawSleepingPet();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      this.drawPet(this.currentMood);
+      this.startAllStats();
+    }
+  }
+
+  drawSleepingPet() {
+    const ctx = this.ctx;
+    ctx.clearRect(0, 0, 900, 500);
+
+    if (this.backgroundImage?.complete) {
+      ctx.drawImage(this.backgroundImage, 0, 0, 900, 500);
+    }
+
+    const petImg = new Image();
+    petImg.src = 'assets/fluff_sleep.png';
+
+    petImg.onload = () => {
+      const petWidth = 200;
+      const petHeight = 200;
+      const x = (900 - petWidth) / 2;
+      const y = 255;
+
+      ctx.drawImage(petImg, x, y, petWidth, petHeight);
+    };
+
+    // Optional: draw dark overlay
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.fillRect(0, 0, 900, 500);
   }
 
   ngOnDestroy() {
