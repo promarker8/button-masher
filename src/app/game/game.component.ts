@@ -46,7 +46,7 @@ export class GameComponent implements OnInit {
       'digipet': url.includes('/game/digipet'),
       'chaser': url.includes('/game/chaser'),
       'hilo': url.includes('/game/higher-lower'),
-      'spaceinvaders': url.includes('/game/space-invaders'),
+      'kitchennightmare': url.includes('/game/kitchen-nightmare'),
       'default': !(url.includes('/game/chaser') || url.includes('/game/higher-lower') || url.includes('/game/digipet'))
     };
   }

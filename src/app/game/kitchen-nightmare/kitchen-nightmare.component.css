@@ -1,0 +1,268 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* .game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #fff2cc;
+    border: 4px solid #f5ae5e;
+    overflow: hidden;
+} */
+
+.game-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom, #fff2cc 0%, #fac87c 50%, #ffc075 100%);
+    border: 4px solid #3a2711;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.player {
+    position: absolute;
+    height: 90px;
+    width: auto;
+}
+
+.bullet {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.05s linear;
+}
+
+.enemy {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.1s linear;
+}
+
+.kitchen-counter {
+    background: #9c765d;
+    border: 2px solid #5d4037;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    z-index: 10;
+}
+
+.counter-top,
+.counter-bottom {
+    height: 30px;
+    width: 100%;
+    left: 0;
+}
+
+.counter-top {
+    top: 0;
+}
+
+.counter-bottom {
+    bottom: 0;
+}
+
+.counter-left,
+.counter-right {
+    width: 30px;
+    height: 100%;
+    top: 0;
+}
+
+.counter-left {
+    left: 0;
+}
+
+.counter-right {
+    right: 0;
+}
+
+/* .shield {
+    width: 150px;
+    height: 80px;
+    background: #a1887f;
+    border: 1px solid #4e342e;
+    position: absolute;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.shield-img {
+    height: 40px;
+    object-fit: contain;
+    display: block;
+} */
+
+/* .shield {
+    width: 150px;
+    height: 80px;
+    background: #a1887f;
+    border: 1px solid #4e342e;
+    position: absolute;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.shield-img {
+    height: 100%;
+    width: auto;
+    display: block;
+    border-radius: 4px;
+}
+
+
+.align-left {
+    object-fit: contain;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: auto;
+}
+
+.align-right {
+    object-fit: contain;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: auto;
+}
+
+.align-center {
+    object-fit: contain;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    height: 100%;
+    width: auto;
+}
+
+
+.bottom-left {
+    bottom: 0;
+    left: 0;
+}
+
+.bottom-right {
+    bottom: 0;
+    right: 0;
+}
+
+.top-left {
+    top: 0;
+    left: 0;
+}
+
+.top-right {
+    top: 0;
+    right: 0;
+}
+
+.center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+} */
+
+
+
+
+.shield {
+    width: 150px;
+    height: 80px;
+    /* You mentioned height 150 before, but your CSS says 80 here? Adjust as needed */
+    background: #a58169;
+    border: 1px solid #4e342e;
+    position: absolute;
+    overflow: hidden;
+    z-index: 10;
+}
+
+/* Base styles for all shield images */
+.shield-img {
+    height: 100%;
+    width: auto;
+    display: block;
+    border-radius: 4px;
+    object-fit: contain;
+    /* Ensure images fit nicely */
+    position: absolute;
+}
+
+/* Horizontal alignments (top edge) */
+.align-left {
+    left: 0;
+    top: 0;
+}
+
+.align-right {
+    right: 0;
+    top: 0;
+}
+
+.align-center {
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+}
+
+/* Vertical + Horizontal corner alignments */
+.top-left {
+    top: -35%;
+    left: 5%;
+}
+
+.top-right {
+    top: -35%;
+    right: 0;
+}
+
+.bottom-left {
+    bottom: 5%;
+    left: 5%;
+}
+
+.bottom-right {
+    bottom: 5%;
+    right: 5%;
+}
+
+/* Center both horizontally and vertically */
+.center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.normal-right {
+    top: 0;
+    right: 0;
+}
+
+.normal-left {
+    top: 0;
+    left: 0;
+}
+
+/* Optional cropping helpers — tweak height or clip as needed */
+/* For example, to crop top part when positioning on top: */
+.crop-top {
+    clip-path: inset(30% 0 0 0);
+    /* Crops top 30%, adjust as needed */
+}
+
+/* To crop bottom part: */
+.crop-bottom {
+    clip-path: inset(0 0 30% 0);
+    /* Crops bottom 30%, adjust as needed */
+}

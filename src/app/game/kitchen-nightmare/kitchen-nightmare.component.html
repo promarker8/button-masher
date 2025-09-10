@@ -1,0 +1,33 @@
+<div class="game-container">
+
+    <!-- Edge Counters -->
+    <div class="kitchen-counter counter-top"></div>
+    <div class="kitchen-counter counter-bottom"></div>
+    <div class="kitchen-counter counter-left"></div>
+    <div class="kitchen-counter counter-right"></div>
+
+    <!-- Enemies -->
+    <ng-container *ngFor="let enemy of enemies">
+        <img *ngIf="enemy.active" [src]="'assets/' + enemy.type" class="enemy" [style.left.px]="enemy.x"
+            [style.top.px]="enemy.y" />
+    </ng-container>
+
+    <!-- Shields -->
+    <ng-container *ngFor="let shield of shields">
+        <div *ngIf="shield.active" class="shield" [style.left.px]="shield.x" [style.bottom.px]="shield.y">
+            <ng-container *ngFor="let img of shield.images; let idx = index">
+                <img class="shield-img" [src]="img" [ngClass]="shield.alignments[idx]" />
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <!-- Player -->
+    <img [src]="'assets/' + player.sprite" class="player" [style.left.px]="player.x" [style.bottom.px]="player.y" />
+
+    <!-- Bullets -->
+    <ng-container *ngFor="let bullet of bullets">
+        <img *ngIf="bullet.active" [src]="'assets/' + bullet.type" class="bullet" [style.left.px]="bullet.x"
+            [style.bottom.px]="playableHeight - bullet.y" />
+    </ng-container>
+
+</div>
