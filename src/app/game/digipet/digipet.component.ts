@@ -483,7 +483,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    if (!this.isShowerMode && !this.isDead) {
+    if (!this.isShowerMode) {
 
       // const menuGrid = document.querySelector('.main-circle');
 
