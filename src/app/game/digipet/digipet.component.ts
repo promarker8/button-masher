@@ -477,7 +477,13 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   toggleMainButton() {
-    if (!this.isShowerMode) {
+
+    if (this.isDead) {
+      this.revivePet();
+      return;
+    }
+
+    if (!this.isShowerMode && !this.isDead) {
 
       // const menuGrid = document.querySelector('.main-circle');
 
@@ -704,6 +710,9 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   revivePet() {
+
+    console.log("reviving");
+
     this.pauseAllStats();
 
     this.hunger = 100;
@@ -843,6 +852,10 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   cycleCurrentMenuSelection(forward: boolean = true) {
+    if (this.isDead || this.isShowerMode) {
+      return;
+    }
+
     if (!this.menuOpenFood && !this.menuOpenToy) {
       this.animateButtons();
     }
@@ -872,7 +885,9 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   toggleSleep() {
-    console.log("sleep")
+
+    if (this.isDead) return;
+
     this.isSleeping = !this.isSleeping;
 
     if (this.isSleeping) {

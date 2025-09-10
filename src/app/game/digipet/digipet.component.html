@@ -148,7 +148,8 @@
                         <div class="dpad-center"></div>
                     </div>
 
-                    <button class="btn btn-dark console-menu-btn" (click)=" toggleToyMenu()">toys</button>
+                    <button class="btn btn-dark console-menu-btn" (click)=" toggleToyMenu()"
+                        [disabled]="isShowerMode || isDead">toys</button>
 
                     <!-- <button class="btn-bathroom" *ngIf="!isShowerMode" [disabled]="isDead"
                         (click)="enterBathroom()">Visit
@@ -162,10 +163,11 @@
                         <input id="digipetName" class="form-control" type="text" placeholder="name your pet">
                     </div>
 
-                    <button class="btn btn-dark console-menu-btn" (click)=" toggleFoodMenu()">food</button>
+                    <button class="btn btn-dark console-menu-btn" (click)=" toggleFoodMenu()"
+                        [disabled]="isShowerMode || isDead">food</button>
 
-                    <div id="mainBtn" class="btn btn-circle mx-2" (click)="toggleMainButton()" [class.disabled]="isDead"
-                        [attr.aria-disabled]="isDead ? true : null" [style.pointerEvents]="isDead ? 'none' : 'auto'">
+                    <div id="mainBtn" class="btn btn-circle mx-2" (click)="toggleMainButton()"
+                        [attr.aria-disabled]="isDead ? true : null">
                     </div>
 
                 </div>

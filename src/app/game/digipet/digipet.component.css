@@ -1049,6 +1049,21 @@
         background: #333;
     }
 
+    .sleep-toggle {
+        position: absolute;
+        top: 10%;
+        left: 20%;
+        padding: 6px;
+        z-index: 19;
+        cursor: pointer;
+
+        & img {
+            width: 28px;
+            box-shadow: -6px 0px 8px rgba(0, 0, 0, 0.15);
+            border-radius: 2px;
+        }
+    }
+
     /* media queries - largest to smallest (max-width way) */
     @media (max-width: 1100px) {
         .main-circle {
@@ -1111,11 +1126,11 @@
         }
 
         .sleep-toggle {
-            top: 12% !important;
-            left: 21% !important;
+            top: 10% !important;
+            left: 20% !important;
 
             & img {
-                width: 22px !important;
+                width: 18px !important;
             }
         }
 
@@ -1208,11 +1223,11 @@
         }
 
         .sleep-toggle {
-            top: 14% !important;
-            left: 22% !important;
+            top: 9% !important;
+            left: 20% !important;
 
             & img {
-                width: 18px !important;
+                width: 16px !important;
             }
         }
     }
@@ -1396,8 +1411,13 @@
             margin-bottom: 8px;
         }
 
-        .sleep-toggle img {
-            width: 18px !important;
+        .sleep-toggle {
+            top: 10% !important;
+            left: 21% !important;
+
+            & img {
+                width: 12px !important;
+            }
         }
 
         #digipetName {
@@ -1478,8 +1498,13 @@
             margin-bottom: 8px;
         }
 
-        .sleep-toggle img {
-            width: 15px !important;
+        .sleep-toggle {
+            top: 11% !important;
+            left: 22% !important;
+
+            & img {
+                width: 9px !important;
+            }
         }
     }
 
@@ -1505,21 +1530,6 @@
 
     .swell-animation {
         animation: swell-animation 0.7s ease-in-out;
-    }
-
-    .sleep-toggle {
-        position: absolute;
-        top: 10%;
-        left: 20%;
-        padding: 6px;
-        z-index: 19;
-        cursor: pointer;
-
-        & img {
-            width: 28px;
-            box-shadow: -6px 0px 8px rgba(0, 0, 0, 0.15);
-            border-radius: 2px;
-        }
     }
 
     .glitch-overlay {
