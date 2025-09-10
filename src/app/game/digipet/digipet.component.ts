@@ -465,7 +465,7 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   }
 
   animateButtons() {
-    const buttons = document.querySelectorAll('.main-circle');
+    const buttons = document.querySelectorAll('.main-circle, .console-menu-btn');
 
     buttons.forEach(button => {
       button.classList.add('swell-animation');
@@ -750,13 +750,27 @@ export class DigipetComponent implements AfterViewInit, OnDestroy {
   getResponsiveRowSettings(): { count: number; radius: number; spread: number }[] {
     const screenWidth = window.innerWidth;
 
-    if (screenWidth < 900) {
+    if (screenWidth < 481) {
+      // Smallest screen
+      return [
+        { count: 4, radius: 38, spread: 115 },
+        { count: 4, radius: 68, spread: 65 },
+      ];
+    }
+    else if (screenWidth < 651) {
       // Small screen
       return [
-        { count: 4, radius: 50, spread: 155 },
-        { count: 4, radius: 90, spread: 85 },
+        { count: 4, radius: 40, spread: 130 },
+        { count: 4, radius: 70, spread: 70 },
       ];
-    } else if (screenWidth < 1100) {
+    }
+    else if (screenWidth < 900) {
+      // Bigger small screen
+      return [
+        { count: 4, radius: 50, spread: 145 },
+        { count: 4, radius: 85, spread: 85 },
+      ];
+    } else if (screenWidth < 1101) {
       // Medium screen
       return [
         { count: 4, radius: 65, spread: 155 },
