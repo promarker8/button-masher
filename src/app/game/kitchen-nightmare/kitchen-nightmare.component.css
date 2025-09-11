@@ -1,9 +1,21 @@
+* {
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* IE10+/Edge */
+    user-select: none;
+    /* Standard */
+}
+
 html,
 body {
     margin: 0;
     padding: 0;
     height: 100%;
     overflow: hidden;
+    -webkit-touch-callout: none;
 }
 
 /* .game-container {
@@ -269,13 +281,13 @@ body {
 
 .mobile-controls {
     position: fixed;
-    bottom: 10px;
+    bottom: 4px;
     left: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px;
+    padding: 0 5px;
     z-index: 999;
     pointer-events: auto;
 }
@@ -283,23 +295,26 @@ body {
 .arrow-button {
     background: transparent;
     border: none;
-    font-size: 48px;
+    font-size: 20px;
     color: #123a11;
 }
 
 .fire-button {
-    background: #ff4136;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-40%);
+    width: 30px;
+    height: 30px;
+    background-color: #f53f3f;
+    border: 3px solid #9f1818;
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 0 #9f1818, 0 6px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    cursor: pointer;
 }
 
 .fire-button:active {
-    background-color: darkred;
-    transform: scale(0.95);
+    transform: translateX(-40%) translateY(2px);
+    box-shadow: 0 2px 0 #a52a2a;
 }

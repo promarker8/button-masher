@@ -34,7 +34,7 @@
     </ng-container>
 
     <!-- Mobile Controls -->
-    <div *ngIf="isMobile" class="mobile-controls">
+    <div *ngIf="isMobile" ss="mobile-controls">
         <!-- Left Arrow -->
         <button class="arrow-button left" (touchstart)="startMoving('left')" (touchend)="stopMoving()">
             <i class="bi bi-arrow-left-circle-fill"></i>
@@ -42,9 +42,7 @@
 
         <!-- Fire Button -->
         <button class="fire-button" (touchstart)="knGameService.startAutoFire()"
-            (touchend)="knGameService.stopAutoFire()">
-            FIRE
-        </button>
+            (touchend)="knGameService.stopAutoFire()"></button>
 
         <!-- Right Arrow -->
         <button class="arrow-button right" (touchstart)="startMoving('right')" (touchend)="stopMoving()">

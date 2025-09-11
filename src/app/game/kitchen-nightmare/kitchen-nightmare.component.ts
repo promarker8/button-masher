@@ -85,7 +85,6 @@ export class KitchenNightmareComponent implements OnInit {
   }
 
   moveInterval: any;
-
   startMoving(direction: 'left' | 'right') {
     if (this.moveInterval) return;
 
@@ -93,11 +92,11 @@ export class KitchenNightmareComponent implements OnInit {
       ? () => this.knGameService.movePlayerLeft()
       : () => this.knGameService.movePlayerRight();
 
-    moveFn(); // move immediately
+    moveFn();
 
     this.moveInterval = setInterval(() => {
       moveFn();
-    }, 100); // adjust speed here
+    }, 100); // adjust speed 
   }
 
   stopMoving() {
