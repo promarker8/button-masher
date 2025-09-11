@@ -51,6 +51,7 @@ body {
     width: 20px;
     height: 20px;
     transition: transform 0.05s linear;
+    z-index: 20;
 }
 
 .enemy {
