@@ -7,13 +7,13 @@
     <div class="kitchen-counter counter-right"></div>
 
     <!-- Enemies -->
-    <ng-container *ngFor="let enemy of enemies">
+    <ng-container *ngFor="let enemy of knGameService.enemies; trackBy: enemyService.trackByEnemy">
         <img *ngIf="enemy.active" [src]="'assets/' + enemy.type" class="enemy" [style.left.px]="enemy.x"
-            [style.top.px]="enemy.y" />
+            [style.top.px]="enemy.y" (error)="enemy.type = 'assets/enemies/apple.svg'" />
     </ng-container>
 
     <!-- Shields -->
-    <ng-container *ngFor="let shield of shields">
+    <ng-container *ngFor="let shield of knGameService.shields">
         <div *ngIf="shield.active" class="shield" [style.left.px]="shield.x" [style.bottom.px]="shield.y">
             <ng-container *ngFor="let img of shield.images; let idx = index">
                 <img class="shield-img" [src]="img" [ngClass]="shield.alignments[idx]" />
@@ -22,12 +22,13 @@
     </ng-container>
 
     <!-- Player -->
-    <img [src]="'assets/' + player.sprite" class="player" [style.left.px]="player.x" [style.bottom.px]="player.y" />
+    <img [src]="'assets/' + knGameService.player.sprite" class="player" [style.left.px]="knGameService.player.x"
+        [style.bottom.px]="knGameService.player.y" />
 
     <!-- Bullets -->
-    <ng-container *ngFor="let bullet of bullets">
+    <ng-container *ngFor="let bullet of knGameService.bullets">
         <img *ngIf="bullet.active" [src]="'assets/' + bullet.type" class="bullet" [style.left.px]="bullet.x"
-            [style.bottom.px]="playableHeight - bullet.y" />
+            [style.bottom.px]="knGameService.playableHeight - bullet.y" />
     </ng-container>
 
 </div>
