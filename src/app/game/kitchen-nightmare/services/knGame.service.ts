@@ -121,7 +121,7 @@ export class KnGameService {
 
 
   cleanupExplosions(currentTime: number): void {
-    const duration = 500;
+    const duration = 800;
     this.explosions = this.explosions.filter(explosion => currentTime - explosion.timestamp < duration);
   }
 
