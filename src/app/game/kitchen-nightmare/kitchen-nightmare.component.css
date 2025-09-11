@@ -295,17 +295,17 @@ body {
 .arrow-button {
     background: transparent;
     border: none;
-    font-size: 20px;
+    font-size: 25px;
     color: #123a11;
 }
 
 .fire-button {
     position: fixed;
-    bottom: 8px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-40%);
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
     background-color: #f53f3f;
     border: 3px solid #9f1818;
     border-radius: 50%;
