@@ -267,21 +267,36 @@ body {
     left: 0;
 }
 
-.fire-button {
+.mobile-controls {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 15px 25px;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    background-color: red;
-    border: none;
-    border-radius: 12px;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
     z-index: 999;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-    touch-action: manipulation;
-    user-select: none;
+    pointer-events: auto;
+}
+
+.arrow-button {
+    background: transparent;
+    border: none;
+    font-size: 48px;
+    color: #123a11;
+}
+
+.fire-button {
+    background: #ff4136;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .fire-button:active {

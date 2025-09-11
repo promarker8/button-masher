@@ -84,6 +84,27 @@ export class KitchenNightmareComponent implements OnInit {
     }
   }
 
+  moveInterval: any;
+
+  startMoving(direction: 'left' | 'right') {
+    if (this.moveInterval) return;
+
+    const moveFn = direction === 'left'
+      ? () => this.knGameService.movePlayerLeft()
+      : () => this.knGameService.movePlayerRight();
+
+    moveFn(); // move immediately
+
+    this.moveInterval = setInterval(() => {
+      moveFn();
+    }, 100); // adjust speed here
+  }
+
+  stopMoving() {
+    clearInterval(this.moveInterval);
+    this.moveInterval = null;
+  }
+
   gameLoop(timestamp?: number) {
     this.knGameService.moveBullets();
     this.knGameService.checkCollisions();

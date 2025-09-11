@@ -33,7 +33,23 @@
             [style.bottom.px]="knGameService.playableHeight - bullet.y" />
     </ng-container>
 
-    <!-- Mobile Fire Bullet button -->
-    <button *ngIf="isMobile" class="fire-button" (click)="knGameService.fireBullet()">FIRE</button>
+    <!-- Mobile Controls -->
+    <div *ngIf="isMobile" class="mobile-controls">
+        <!-- Left Arrow -->
+        <button class="arrow-button left" (touchstart)="startMoving('left')" (touchend)="stopMoving()">
+            <i class="bi bi-arrow-left-circle-fill"></i>
+        </button>
+
+        <!-- Fire Button -->
+        <button class="fire-button" (touchstart)="knGameService.startAutoFire()"
+            (touchend)="knGameService.stopAutoFire()">
+            FIRE
+        </button>
+
+        <!-- Right Arrow -->
+        <button class="arrow-button right" (touchstart)="startMoving('right')" (touchend)="stopMoving()">
+            <i class="bi bi-arrow-right-circle-fill"></i>
+        </button>
+    </div>
 
 </div>
