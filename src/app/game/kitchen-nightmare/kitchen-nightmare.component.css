@@ -301,11 +301,11 @@ body {
 
 .fire-button {
     position: fixed;
-    bottom: 20px;
+    bottom: 8px;
     left: 50%;
     transform: translateX(-40%);
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     background-color: #f53f3f;
     border: 3px solid #9f1818;
     border-radius: 50%;
