@@ -7,7 +7,7 @@
     <div class="kitchen-counter counter-right"></div>
 
     <!-- Enemies -->
-    <ng-container *ngFor="let enemy of knGameService.enemies; trackBy: enemyService.trackByEnemy">
+    <ng-container *ngFor="let enemy of knGameService.enemies">
         <img *ngIf="enemy.active" [src]="'assets/' + enemy.type" class="enemy" [style.left.px]="enemy.x"
             [style.top.px]="enemy.y" (error)="enemy.type = 'assets/enemies/apple.svg'" />
     </ng-container>

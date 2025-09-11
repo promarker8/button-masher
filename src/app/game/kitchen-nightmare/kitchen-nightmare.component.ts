@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { KnGameService } from './services/knGame.service';
 import { ScoringService } from './services/scoring.service';
-import { EnemyService } from './services/enemy.service';
 
 @Component({
   standalone: true,
@@ -14,7 +13,6 @@ import { EnemyService } from './services/enemy.service';
 export class KitchenNightmareComponent implements OnInit {
   constructor(
     public knGameService: KnGameService,
-    public enemyService: EnemyService,
     public scoringService: ScoringService
   ) { }
 
@@ -22,9 +20,19 @@ export class KitchenNightmareComponent implements OnInit {
     this.gameLoop();
   }
 
+  getSafeAreaInsetBottom(): number {
+    return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom')) || 0;
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.knGameService.resizeGame(window.innerWidth, window.innerHeight);
+    // this.knGameService.resizeGame(window.innerWidth, window.innerHeight);
+
+    const safeBottom = this.getSafeAreaInsetBottom();
+    const adjustedHeight = window.innerHeight - safeBottom;
+
+    this.knGameService.resizeGame(window.innerWidth, adjustedHeight);
+
   }
 
   @HostListener('document:keydown', ['$event'])

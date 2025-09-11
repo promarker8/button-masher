@@ -5,10 +5,6 @@ import { Enemy } from '../models/enemy.model';
 export class EnemyService {
   private margin = 50;
 
-  trackByEnemy(index: number, enemy: Enemy): any {
-    return enemy.id ?? index;
-  }
-
   spawnEnemies(gameWidth: number): Enemy[] {
     const playableWidth = gameWidth - this.margin * 2;
 
@@ -32,7 +28,6 @@ export class EnemyService {
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         enemies.push({
-          id: `enemy-${row}-${col}`,
           x: startX + col * totalEnemyWidth,
           y: row * 60 + 50,
           active: true,
