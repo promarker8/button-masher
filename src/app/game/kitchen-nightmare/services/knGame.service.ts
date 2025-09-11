@@ -20,6 +20,7 @@ export class KnGameService {
 
   enemies: Enemy[] = [];
   shields: Shield[] = [];
+  explosions: { x: number; y: number; timestamp: number }[] = [];
 
   constructor(
     private playerService: PlayerService,
@@ -107,10 +108,21 @@ export class KnGameService {
 
           if (enemy.hp <= 0) {
             enemy.active = false;
+            this.explosions.push({
+              x: enemy.x,
+              y: enemy.y,
+              timestamp: performance.now()
+            });
           }
         }
       });
     });
+  }
+
+
+  cleanupExplosions(currentTime: number): void {
+    const duration = 500;
+    this.explosions = this.explosions.filter(explosion => currentTime - explosion.timestamp < duration);
   }
 
   private lastDropTime = 0;

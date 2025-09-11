@@ -10,8 +10,13 @@
     <ng-container *ngFor="let enemy of knGameService.enemies">
         <img *ngIf="enemy.active" [src]="'assets/' + enemy.type" class="enemy" [style.left.px]="enemy.x"
             [style.top.px]="enemy.y" (error)="enemy.type = 'assets/enemies/apple.svg'" />
-        <img *ngIf="!enemy.active" src="assets/explosion.gif" class="enemy explosion" [style.left.px]="enemy.x"
-            [style.top.px]="enemy.y" />
+
+        <!-- Explosion Gif -->
+        <ng-container *ngFor="let explosion of knGameService.explosions">
+            <img src="assets/explosion.gif" class="enemy explosion" [style.left.px]="explosion.x"
+                [style.top.px]="explosion.y" />
+        </ng-container>
+
     </ng-container>
 
     <!-- Shields -->

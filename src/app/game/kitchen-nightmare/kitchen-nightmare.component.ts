@@ -111,5 +111,8 @@ export class KitchenNightmareComponent implements OnInit {
     this.knGameService.moveEnemies(timestamp || performance.now());
 
     requestAnimationFrame((ts) => this.gameLoop(ts));
+
+    this.knGameService.cleanupExplosions(timestamp || performance.now());
+
   }
 }
