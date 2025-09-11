@@ -14,7 +14,7 @@ export class EnemyService {
     const totalEnemyWidth = enemyWidth + spacingX;
     const cols = Math.floor(playableWidth / totalEnemyWidth);
 
-    const totalEnemies = 66;
+    const totalEnemies = 65;
     const enemyImages = Array.from({ length: totalEnemies }, (_, i) => `enemies/${i + 1}.svg`);
     const shuffledEnemies = this.shuffleArray([...enemyImages]);
 

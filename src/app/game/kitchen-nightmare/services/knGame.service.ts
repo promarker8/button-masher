@@ -91,19 +91,92 @@ export class KnGameService {
 
   checkCollisions(): void {
     this.bullets.forEach(bullet => {
+      // Check shield collisions
       this.shields.forEach(shield => {
         if (shield.active && bullet.active && this.checkCollision(bullet, shield)) {
           bullet.active = false;
           shield.active = false;
         }
       });
+
+      // Check enemy collisions
+      this.enemies.forEach(enemy => {
+        if (enemy.active && bullet.active && this.checkCollision(bullet, enemy)) {
+          bullet.active = false;
+          enemy.hp = (enemy.hp || 1) - 1;
+
+          if (enemy.hp <= 0) {
+            enemy.active = false;
+          }
+        }
+      });
     });
   }
 
+  private lastDropTime = 0;
+  private dropInterval = 2000; // ms
+
+  moveEnemies(timestamp: number): void {
+    if (!this.lastDropTime) this.lastDropTime = timestamp;
+
+    if (timestamp - this.lastDropTime > this.dropInterval) {
+      this.enemies.forEach(enemy => {
+        if (enemy.active) {
+          enemy.y += 6;
+        }
+      });
+      this.lastDropTime = timestamp;
+    }
+  }
+
+
+  // private enemyDirection = 1; // 1: right, -1: left
+
+  // moveEnemies(): void {
+  //   const dx = 1;
+  //   const dy = 20;
+
+  //   // Filter active enemies once
+  //   const activeEnemies = this.enemies.filter(e => e.active);
+  //   if (activeEnemies.length === 0) return;
+
+  //   // Find leftmost and rightmost enemies
+  //   const leftmostX = Math.min(...activeEnemies.map(e => e.x));
+  //   const rightmostX = Math.max(...activeEnemies.map(e => e.x));
+
+  //   // Check if we need to drop and reverse direction
+  //   const hitLeftBoundary = leftmostX <= this.margin;
+  //   const hitRightBoundary = rightmostX >= this.gameWidth - this.margin - 40;
+
+  //   if (hitLeftBoundary && this.enemyDirection === -1) {
+  //     this.enemyDirection = 1;
+  //     activeEnemies.forEach(e => e.y += dy);
+  //   } else if (hitRightBoundary && this.enemyDirection === 1) {
+  //     this.enemyDirection = -1;
+  //     activeEnemies.forEach(e => e.y += dy);
+  //   }
+
+  //   // Move all active enemies horizontally
+  //   activeEnemies.forEach(enemy => {
+  //     enemy.x += dx * this.enemyDirection;
+  //   });
+  // }
+
+
   private checkCollision(a: { x: number; y: number }, b: { x: number; y: number }): boolean {
-    const dx = a.x - b.x;
-    const dy = a.y - b.y;
-    return Math.abs(dx) < 30 && Math.abs(dy) < 30;
+    const bulletX = a.x + 10; // Bullet is 20px so center = +10
+    const bulletY = a.y + 10;
+    const enemyX = b.x + 20;  // Enemy is 40px wide so center = +20
+    const enemyY = b.y - 60; // go to centre not edge
+
+    const dx = bulletX - enemyX;
+    const dy = bulletY - enemyY;
+    return Math.abs(dx) < 15 && Math.abs(dy) < 10;
+
+    // circular hit point, rather than sqaure?
+    // const distance = Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+    // return distance < 20;
+
   }
 
   startAutoFire(): void {

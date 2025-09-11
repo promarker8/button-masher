@@ -61,6 +61,9 @@ export class KitchenNightmareComponent implements OnInit {
   @HostListener('touchstart', ['$event'])
   onTouchStart(event: TouchEvent) {
     this.touchStartX = event.changedTouches[0].screenX;
+
+    console.log('Touch Start', this.touchStartX);
+    console.log('Touch End', this.touchEndX);
   }
 
   @HostListener('touchend', ['$event'])
@@ -81,10 +84,12 @@ export class KitchenNightmareComponent implements OnInit {
     }
   }
 
-  gameLoop() {
+  gameLoop(timestamp?: number) {
     this.knGameService.moveBullets();
     this.knGameService.checkCollisions();
 
-    requestAnimationFrame(() => this.gameLoop());
+    this.knGameService.moveEnemies(timestamp || performance.now());
+
+    requestAnimationFrame((ts) => this.gameLoop(ts));
   }
 }

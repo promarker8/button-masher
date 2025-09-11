@@ -2,7 +2,8 @@
 <div [ngClass]="getSidebarClasses()">
     <button *ngIf="isCollapsed && showToggleButton" class="navBtn btn btn-outline-dark" (click)="toggleSidebar()"
         aria-label="Toggle menu">
-        <i class="bi bi-list"></i>
+        <i *ngIf="!isKitchenNightmare()" class="bi bi-list"></i>
+        <img id="burger-menu" *ngIf="isKitchenNightmare()" src="assets/burger.svg" alt="burger menu">
     </button>
 </div>
 

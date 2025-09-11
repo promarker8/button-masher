@@ -25,6 +25,7 @@ body {
     border: 4px solid #3a2711;
     overflow: hidden;
     box-sizing: border-box;
+    touch-action: none;
 }
 
 .player {
@@ -44,7 +45,26 @@ body {
     position: absolute;
     width: 40px;
     height: 40px;
-    transition: transform 0.1s linear;
+    pointer-events: none;
+}
+
+.explosion {
+    width: 50px;
+    height: 50px;
+    animation: explode 0.4s steps(5) forwards;
+    z-index: 20;
+}
+
+@keyframes explode {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(2);
+    }
 }
 
 .kitchen-counter {

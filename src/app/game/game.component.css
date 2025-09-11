@@ -33,6 +33,10 @@
     background-color: #87a5f1;
 }
 
+.kitchennightmare:not(button) {
+    background-color: #c14467;
+}
+
 .default {
     background-color: transparent;
 }
@@ -75,15 +79,26 @@ nav {
 
 .navBtn {
     position: fixed;
-    top: .6rem;
-    left: .6rem;
-    z-index: 1060;
+    top: .4rem;
+    left: .4rem;
+    z-index: 1000;
     align-self: flex-start;
     height: auto;
     font-weight: bold;
     border: none;
     font-size: 2rem;
     padding: 10px;
+}
+
+.kitchennightmare .navBtn {
+    background-color: #9c765d;
+    border-right: 2px solid #5d4037;
+    border-bottom: 2px solid #5d4037;
+}
+
+#burger-menu {
+    width: 50px;
+    height: auto;
 }
 
 .default .navBtn:hover {
@@ -96,6 +111,12 @@ nav {
 
 .hilo .navBtn:hover {
     background-color: #1b0101;
+}
+
+.kitchennightmare .navBtn:hover {
+    /* background-color: #c14467;
+    color: white; */
+    background-color: #ffc075;
 }
 
 .digipet .navBtn:hover {
@@ -133,6 +154,10 @@ nav i:not(.navBtnInBar i) {
 
 nav.hilo i:not(.navBtnInBar i) {
     color: #ffc100 !important;
+}
+
+nav.kitchennightmare i:not(.navBtnInBar i) {
+    color: #f0d5d8 !important;
 }
 
 nav.chaser i:not(.navBtnInBar i) {

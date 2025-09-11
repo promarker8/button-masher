@@ -51,6 +51,10 @@ export class GameComponent implements OnInit {
     };
   }
 
+  isKitchenNightmare(): boolean {
+    return this.router.url.includes('/game/kitchen-nightmare');
+  }
+
   private triggerSidebarAnimation() {
     setTimeout(() => {
       const toggleButton = document.querySelector('.navBtnInBar') as HTMLElement;
