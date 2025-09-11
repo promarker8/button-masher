@@ -21,6 +21,7 @@ export class KitchenNightmareComponent implements OnInit {
   }
 
   resizeTimeout: any;
+
   @HostListener('window:resize')
   onResize() {
     if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
@@ -31,7 +32,10 @@ export class KitchenNightmareComponent implements OnInit {
 
       if (window.visualViewport) {
         width = window.visualViewport.width;
-        height = window.visualViewport.height;
+        // height = window.visualViewport.height;
+
+        height = window.visualViewport?.height || window.innerHeight;
+
       }
 
       this.knGameService.resizeGame(width, height);
