@@ -20,19 +20,22 @@ export class KitchenNightmareComponent implements OnInit {
     this.gameLoop();
   }
 
-  getSafeAreaInsetBottom(): number {
-    return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom')) || 0;
-  }
-
-  @HostListener('window:resize', ['$event'])
+  resizeTimeout: any;
+  @HostListener('window:resize')
   onResize() {
-    // this.knGameService.resizeGame(window.innerWidth, window.innerHeight);
+    if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
 
-    const safeBottom = this.getSafeAreaInsetBottom();
-    const adjustedHeight = window.innerHeight - safeBottom;
+    this.resizeTimeout = setTimeout(() => {
+      let width = window.innerWidth;
+      let height = window.innerHeight;
 
-    this.knGameService.resizeGame(window.innerWidth, adjustedHeight);
+      if (window.visualViewport) {
+        width = window.visualViewport.width;
+        height = window.visualViewport.height;
+      }
 
+      this.knGameService.resizeGame(width, height);
+    }, 150);
   }
 
   @HostListener('document:keydown', ['$event'])
