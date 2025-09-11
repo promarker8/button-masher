@@ -31,4 +31,7 @@
             [style.bottom.px]="knGameService.playableHeight - bullet.y" />
     </ng-container>
 
+    <!-- Mobile Fire Bullet button -->
+    <button *ngIf="isMobile" class="fire-button" (click)="knGameService.fireBullet()">FIRE</button>
+
 </div>

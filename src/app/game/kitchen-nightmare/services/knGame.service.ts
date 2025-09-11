@@ -16,6 +16,7 @@ export class KnGameService {
 
   bullets: Bullet[] = [];
   fireCooldown = false;
+  private autoFireInterval: any = null;
 
   enemies: Enemy[] = [];
   shields: Shield[] = [];
@@ -104,4 +105,23 @@ export class KnGameService {
     const dy = a.y - b.y;
     return Math.abs(dx) < 30 && Math.abs(dy) < 30;
   }
+
+  startAutoFire(): void {
+    if (this.autoFireInterval !== null) return;
+
+    // Fire once immediately
+    this.fireBullet();
+
+    this.autoFireInterval = setInterval(() => {
+      this.fireBullet();
+    }, 300); // Adjust rate as needed
+  }
+
+  stopAutoFire(): void {
+    if (this.autoFireInterval !== null) {
+      clearInterval(this.autoFireInterval);
+      this.autoFireInterval = null;
+    }
+  }
+
 }

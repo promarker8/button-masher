@@ -51,6 +51,36 @@ export class KitchenNightmareComponent implements OnInit {
     if (event.key === ' ') this.knGameService.fireBullet();
   }
 
+
+  // mobile swipes
+  isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  touchStartX = 0;
+  touchEndX = 0;
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent) {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(event: TouchEvent) {
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.handleSwipe();
+  }
+
+  handleSwipe() {
+    const movement = this.touchEndX - this.touchStartX;
+
+    if (Math.abs(movement) < 30) return; // ignore tiny movements
+
+    if (movement > 0) {
+      this.knGameService.movePlayerRight();
+    } else {
+      this.knGameService.movePlayerLeft();
+    }
+  }
+
   gameLoop() {
     this.knGameService.moveBullets();
     this.knGameService.checkCollisions();

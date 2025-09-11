@@ -8,7 +8,7 @@ export class PlayerService {
   private gameWidth = window.innerWidth;
   private gameHeight = window.innerHeight;
 
-  private fireCooldown = false;
+  // private fireCooldown = false;
 
   player: Player;
 
@@ -62,17 +62,17 @@ export class PlayerService {
     this.player.x = Math.max(this.margin, Math.min(this.player.x, this.gameWidth - this.margin - 35));
   }
 
-  fireBullet(): Bullet | null {
-    if (this.fireCooldown) return null;
+  // fireBullet(): Bullet | null {
+  //   if (this.fireCooldown) return null;
 
-    this.fireCooldown = true;
-    setTimeout(() => (this.fireCooldown = false), 250);
+  //   this.fireCooldown = true;
+  //   setTimeout(() => (this.fireCooldown = false), 250);
 
-    return {
-      x: Math.max(this.margin, Math.min(this.player.x + 40, this.gameWidth - this.margin - 20)),
-      y: this.gameHeight - this.margin - 110,
-      active: true,
-      type: this.player.weapon
-    };
-  }
+  //   return {
+  //     x: Math.max(this.margin, Math.min(this.player.x + 40, this.gameWidth - this.margin - 20)),
+  //     y: this.gameHeight - this.margin - 110,
+  //     active: true,
+  //     type: this.player.weapon
+  //   };
+  // }
 }
