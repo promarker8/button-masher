@@ -335,9 +335,10 @@ body {
     box-shadow: 0 2px 0 #9f1818, 0 6px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     cursor: pointer;
+    transition: transform 0.1s ease;
 }
 
 .fire-button:active {
-    transform: translateX(4%) translateY(2px);
+    transform: scale(.9);
     box-shadow: 0 2px 0 #a52a2a;
 }
