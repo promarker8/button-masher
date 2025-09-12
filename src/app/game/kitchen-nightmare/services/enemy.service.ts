@@ -32,7 +32,8 @@ export class EnemyService {
           y: row * 60 + 50,
           active: true,
           type: shuffledEnemies[enemyCounter % shuffledEnemies.length],
-          hp: 1
+          hp: 1,
+          row: row
         });
         enemyCounter++;
       }

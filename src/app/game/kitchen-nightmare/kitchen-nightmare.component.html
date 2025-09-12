@@ -1,7 +1,11 @@
 <div class="game-container" [style.height.px]="viewportHeight">
 
     <!-- Edge Counters -->
-    <div class="kitchen-counter counter-top"></div>
+    <div class="kitchen-counter counter-top">
+        <button class="btn btn-sm" (click)="togglePause()">
+            {{ paused ? 'Resume' : 'Pause' }}
+        </button>
+    </div>
     <div class="kitchen-counter counter-bottom"></div>
     <div class="kitchen-counter counter-left"></div>
     <div class="kitchen-counter counter-right"></div>
@@ -41,16 +45,18 @@
     <!-- Mobile Controls -->
     <div *ngIf="isMobile" class="mobile-controls">
         <!-- Left Arrow -->
-        <button class="arrow-button left" (touchstart)="startMoving('left')" (touchend)="stopMoving()">
+        <button [disabled]="paused" class="arrow-button left" (touchstart)="startMoving('left')"
+            (touchend)="stopMoving()">
             <i class="bi bi-arrow-left-circle-fill"></i>
         </button>
 
         <!-- Fire Button -->
-        <button class="fire-button" (touchstart)="knGameService.startAutoFire()"
+        <button [disabled]="paused" class="fire-button" (touchstart)="handleStartAutoFire()"
             (touchend)="knGameService.stopAutoFire()"></button>
 
         <!-- Right Arrow -->
-        <button class="arrow-button right" (touchstart)="startMoving('right')" (touchend)="stopMoving()">
+        <button [disabled]="paused" class="arrow-button right" (touchstart)="startMoving('right')"
+            (touchend)="stopMoving()">
             <i class="bi bi-arrow-right-circle-fill"></i>
         </button>
     </div>

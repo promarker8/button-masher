@@ -4,4 +4,5 @@ export interface Enemy {
     active: boolean;
     type: string; // filename of SVG
     hp?: number;
+    row?: number;
 }

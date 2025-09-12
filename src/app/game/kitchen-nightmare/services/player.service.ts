@@ -16,9 +16,14 @@ export class PlayerService {
     this.player = this.createDefaultPlayer();
   }
 
+
+  get playableWidth(): number {
+    return this.gameWidth - this.margin * 2;
+  }
+
   private createDefaultPlayer(): Player {
     return {
-      x: this.margin + (this.gameWidth - this.margin * 2) / 2 - 35,
+      x: this.margin + (this.playableWidth) / 2 - 39,
       y: 50,
       speed: 10,
       lives: 3,
@@ -41,7 +46,7 @@ export class PlayerService {
   // }
 
   recenterPlayerHorizontally() {
-    this.player.x = this.margin + (this.gameWidth - this.margin * 2) / 2 - 35;
+    this.player.x = this.playableWidth / 2 - 39;
   }
 
   setGameWidth(width: number) {
@@ -59,7 +64,8 @@ export class PlayerService {
   }
 
   private boundPlayer(): void {
-    this.player.x = Math.max(this.margin, Math.min(this.player.x, this.gameWidth - this.margin - 35));
+    this.player.x = Math.max(this.margin, Math.min(this.player.x, this.playableWidth - this.margin + 21)); // hoenstly I dont know why this is working like this
+    // this.player.x = Math.max(this.margin, Math.min(this.player.x, this.gameWidth - this.margin - 79));
   }
 
   // fireBullet(): Bullet | null {

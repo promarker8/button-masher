@@ -21,6 +21,7 @@ export class KnGameService {
   enemies: Enemy[] = [];
   shields: Shield[] = [];
   explosions: { x: number; y: number; timestamp: number }[] = [];
+  private rowDirections: { [row: number]: number } = {};
 
   constructor(
     private playerService: PlayerService,
@@ -58,6 +59,14 @@ export class KnGameService {
     this.shields = this.shieldService.createShields(this.gameWidth);
     this.bullets = [];
     this.fireCooldown = false;
+
+    this.rowDirections = {};
+    this.enemies.forEach(enemy => {
+      if (enemy.row !== undefined && !(enemy.row in this.rowDirections)) {
+        this.rowDirections[enemy.row] = enemy.row % 2 === 0 ? 1 : -1;
+      }
+    });
+
   }
 
   movePlayerLeft(): void {
@@ -72,7 +81,7 @@ export class KnGameService {
     if (this.fireCooldown) return false;
 
     this.bullets.push({
-      x: Math.max(this.margin, Math.min(this.player.x + 40, this.gameWidth - this.margin - 20)),
+      x: Math.max(this.margin, Math.min(this.player.x + 35 - 10, this.gameWidth - this.margin - 20)),
       y: this.gameHeight - this.margin - 110,
       active: true,
       type: this.player.weapon
@@ -92,9 +101,11 @@ export class KnGameService {
 
   checkCollisions(): void {
     this.bullets.forEach(bullet => {
+      console.log("bullet fired");
       // Check shield collisions
       this.shields.forEach(shield => {
         if (shield.active && bullet.active && this.checkCollision(bullet, shield)) {
+          console.log("bullet hit shield");
           bullet.active = false;
           shield.active = false;
         }
@@ -103,6 +114,7 @@ export class KnGameService {
       // Check enemy collisions
       this.enemies.forEach(enemy => {
         if (enemy.active && bullet.active && this.checkCollision(bullet, enemy)) {
+          console.log("bullet hit enemy");
           bullet.active = false;
           enemy.hp = (enemy.hp || 1) - 1;
 
@@ -126,17 +138,47 @@ export class KnGameService {
   }
 
   private lastDropTime = 0;
-  private dropInterval = 2000; // ms
+  private dropInterval = 500; // ms
+  private readonly enemyWidth = 40;
 
   moveEnemies(timestamp: number): void {
     if (!this.lastDropTime) this.lastDropTime = timestamp;
 
     if (timestamp - this.lastDropTime > this.dropInterval) {
-      this.enemies.forEach(enemy => {
-        if (enemy.active) {
-          enemy.y += 6;
+      const dx = 6; // horizontal step
+      const dy = 6; // vertical step
+
+      const activeEnemies = this.enemies.filter(e => e.active);
+
+      const rows = new Map<number, Enemy[]>();
+
+      // Group enemies by row
+      activeEnemies.forEach(enemy => {
+        const row = enemy.row ?? 0;
+        if (!rows.has(row)) rows.set(row, []);
+        rows.get(row)!.push(enemy);
+      });
+
+      rows.forEach((enemiesInRow, row) => {
+        const direction = this.rowDirections[row] ?? 1;
+
+        // Find leftmost and rightmost enemies in this row - dont let them out lol
+        const leftmostX = Math.min(...enemiesInRow.map(e => e.x));
+        const rightmostX = Math.max(...enemiesInRow.map(e => e.x));
+
+        const hitLeftBoundary = leftmostX <= this.margin;
+        const hitRightBoundary = rightmostX >= this.gameWidth - this.margin - this.enemyWidth - 10;
+
+        if ((direction === -1 && hitLeftBoundary) || (direction === 1 && hitRightBoundary)) {
+          // Reverse and drop down - zigzag style
+          this.rowDirections[row] = -direction;
+          enemiesInRow.forEach(enemy => enemy.y += dy);
+        } else {
+          // Move horizontally
+          enemiesInRow.forEach(enemy => enemy.x += dx * direction);
         }
       });
+
       this.lastDropTime = timestamp;
     }
   }
@@ -183,7 +225,7 @@ export class KnGameService {
 
     const dx = bulletX - enemyX;
     const dy = bulletY - enemyY;
-    return Math.abs(dx) < 15 && Math.abs(dy) < 10;
+    return Math.abs(dx) < 20 && Math.abs(dy) < 10;
 
     // circular hit point, rather than sqaure?
     // const distance = Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
@@ -199,7 +241,7 @@ export class KnGameService {
 
     this.autoFireInterval = setInterval(() => {
       this.fireBullet();
-    }, 300); // Adjust rate as needed
+    }, 300);
   }
 
   stopAutoFire(): void {

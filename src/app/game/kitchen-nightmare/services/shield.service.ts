@@ -44,7 +44,7 @@ export class ShieldService {
           const chosenAlignments = dualAlignmentOptions[Math.floor(Math.random() * dualAlignmentOptions.length)];
 
           shields.push({
-            x: startX + i * totalShieldSpace,
+            x: startX + i * totalShieldSpace - 3,
             y: 150,
             active: true,
             images: [shuffledImages[imageIndex], shuffledImages[secondIndex]],
@@ -58,7 +58,7 @@ export class ShieldService {
       const randomAlignment = defaultAlignments[Math.floor(Math.random() * defaultAlignments.length)];
 
       shields.push({
-        x: startX + i * totalShieldSpace,
+        x: startX + i * totalShieldSpace - 3,
         y: 150,
         active: true,
         images: [shuffledImages[imageIndex]],

@@ -11,6 +11,9 @@ import { ScoringService } from './services/scoring.service';
   styleUrls: ['./kitchen-nightmare.component.css']
 })
 export class KitchenNightmareComponent implements OnInit {
+
+  public paused = false;
+
   constructor(
     public knGameService: KnGameService,
     public scoringService: ScoringService
@@ -45,9 +48,10 @@ export class KitchenNightmareComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   handleKeydown(event: KeyboardEvent) {
+    if (this.paused) return;
     if (event.key === 'ArrowLeft') this.knGameService.movePlayerLeft();
     if (event.key === 'ArrowRight') this.knGameService.movePlayerRight();
-
+    if (event.key === 'p' || event.key === 'P') this.togglePause();
     if (event.key === ' ') this.knGameService.fireBullet();
   }
 
@@ -75,7 +79,7 @@ export class KitchenNightmareComponent implements OnInit {
   handleSwipe() {
     const movement = this.touchEndX - this.touchStartX;
 
-    if (Math.abs(movement) < 30) return; // ignore tiny movements
+    if (Math.abs(movement) < 30 || this.paused) return; // ignore tiny movements
 
     if (movement > 0) {
       this.knGameService.movePlayerRight();
@@ -86,7 +90,7 @@ export class KitchenNightmareComponent implements OnInit {
 
   moveInterval: any;
   startMoving(direction: 'left' | 'right') {
-    if (this.moveInterval) return;
+    if (this.moveInterval || this.paused) return;
 
     const moveFn = direction === 'left'
       ? () => this.knGameService.movePlayerLeft()
@@ -104,15 +108,24 @@ export class KitchenNightmareComponent implements OnInit {
     this.moveInterval = null;
   }
 
-  gameLoop(timestamp?: number) {
-    this.knGameService.moveBullets();
-    this.knGameService.checkCollisions();
+  handleStartAutoFire() {
+    if (this.paused) return;
+    this.knGameService.startAutoFire();
+  }
 
-    this.knGameService.moveEnemies(timestamp || performance.now());
+  togglePause() {
+    this.paused = !this.paused;
+  }
+
+  gameLoop(timestamp?: number) {
+    if (!this.paused) {
+      this.knGameService.moveBullets();
+      this.knGameService.checkCollisions();
+      this.knGameService.moveEnemies(timestamp || performance.now());
+      this.knGameService.cleanupExplosions(timestamp || performance.now());
+    }
 
     requestAnimationFrame((ts) => this.gameLoop(ts));
-
-    this.knGameService.cleanupExplosions(timestamp || performance.now());
 
   }
 }
