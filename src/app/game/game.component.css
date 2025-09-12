@@ -10,13 +10,6 @@
     transition: transform 0.4s ease;
 }
 
-@media (max-width: 900px) {
-    .sidebar.default {
-        width: 230px;
-        background-color: #1a1a1d !important;
-    }
-}
-
 .landing {
     background-color: transparent;
 }
@@ -98,7 +91,7 @@ nav {
 
 #burger-menu {
     width: 50px;
-    height: auto;
+    height: 50px;
 }
 
 .default .navBtn:hover {
@@ -188,4 +181,17 @@ nav.digipet i:not(.navBtnInBar i) {
     100% {
         box-shadow: 0 0 0 rgba(255, 255, 255, 0.4);
     }
+}
+
+@media (max-width: 900px) {
+    .sidebar.default {
+        width: 230px;
+        background-color: #1a1a1d !important;
+    }
+
+    #burger-menu {
+        width: 40px;
+        height: 40px;
+    }
+
 }

@@ -8,7 +8,7 @@
 </div>
 
 <!-- Sidenav -->
-<nav class="sidebar text-white p-3" [ngClass]="getSidebarClasses()">
+<nav #sidebarContainer class="sidebar text-white p-3" [ngClass]="getSidebarClasses()">
     <div class="d-flex justify-content-end">
         <button class="navBtnInBar btn btn-outline-light mb-3" (click)="toggleSidebar()" aria-label="Toggle menu">
             <i class="bi bi-arrow-left"></i>

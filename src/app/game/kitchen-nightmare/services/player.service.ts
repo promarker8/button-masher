@@ -28,7 +28,7 @@ export class PlayerService {
       speed: 10,
       lives: 3,
       sprite: 'chef.png',
-      weapon: 'whisk.png'
+      weapon: 'knife.png'
     };
   }
 

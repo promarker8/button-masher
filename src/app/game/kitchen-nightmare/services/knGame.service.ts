@@ -22,6 +22,7 @@ export class KnGameService {
   shields: Shield[] = [];
   explosions: { x: number; y: number; timestamp: number }[] = [];
   private rowDirections: { [row: number]: number } = {};
+  readonly maxEnemyY = this.playableHeight - 180;
 
   constructor(
     private playerService: PlayerService,
@@ -58,7 +59,10 @@ export class KnGameService {
     this.enemies = this.enemyService.spawnEnemies(this.gameWidth);
     this.shields = this.shieldService.createShields(this.gameWidth);
     this.bullets = [];
+    this.explosions = [];
     this.fireCooldown = false;
+    this.stopAutoFire();
+    this.lastDropTime = 0;
 
     this.rowDirections = {};
     this.enemies.forEach(enemy => {
@@ -138,7 +142,7 @@ export class KnGameService {
   }
 
   private lastDropTime = 0;
-  private dropInterval = 500; // ms
+  private dropInterval = 2; // ms
   private readonly enemyWidth = 40;
 
   moveEnemies(timestamp: number): void {
@@ -146,7 +150,7 @@ export class KnGameService {
 
     if (timestamp - this.lastDropTime > this.dropInterval) {
       const dx = 6; // horizontal step
-      const dy = 6; // vertical step
+      const dy = 7; // vertical step
 
       const activeEnemies = this.enemies.filter(e => e.active);
 
@@ -172,7 +176,13 @@ export class KnGameService {
         if ((direction === -1 && hitLeftBoundary) || (direction === 1 && hitRightBoundary)) {
           // Reverse and drop down - zigzag style
           this.rowDirections[row] = -direction;
-          enemiesInRow.forEach(enemy => enemy.y += dy);
+          enemiesInRow.forEach(enemy => {
+            if (enemy.y + dy >= this.maxEnemyY) {
+              enemy.y = enemy.y;
+            } else {
+              enemy.y += dy;
+            }
+          });
         } else {
           // Move horizontally
           enemiesInRow.forEach(enemy => enemy.x += dx * direction);
@@ -221,7 +231,7 @@ export class KnGameService {
     const bulletX = a.x + 10; // Bullet is 20px so center = +10
     const bulletY = a.y + 10;
     const enemyX = b.x + 20;  // Enemy is 40px wide so center = +20
-    const enemyY = b.y - 60; // go to centre not edge
+    const enemyY = b.y - 25; // go to centre not edge
 
     const dx = bulletX - enemyX;
     const dy = bulletY - enemyY;

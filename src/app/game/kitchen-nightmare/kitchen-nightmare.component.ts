@@ -20,6 +20,7 @@ export class KitchenNightmareComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.knGameService.resetGame();
     this.gameLoop();
   }
 
