@@ -341,7 +341,3 @@ body {
     transform: translateX(4%) translateY(2px);
     box-shadow: 0 2px 0 #a52a2a;
 }
-
-.bi {
-    border: 1px solid red;
-}
