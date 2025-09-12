@@ -142,7 +142,7 @@ export class KnGameService {
   }
 
   private lastDropTime = 0;
-  private dropInterval = 2; // ms
+  private dropInterval = 300; // ms
   private readonly enemyWidth = 40;
 
   moveEnemies(timestamp: number): void {
