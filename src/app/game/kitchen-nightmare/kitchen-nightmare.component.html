@@ -6,9 +6,22 @@
             {{ paused ? 'Resume' : 'Pause' }}
         </button>
     </div>
-    <div class="kitchen-counter counter-bottom"></div>
-    <div class="kitchen-counter counter-left"></div>
-    <div class="kitchen-counter counter-right"></div>
+    <div class="kitchen-counter counter-bottom">
+        <button *ngIf="isMobile" [disabled]="paused" class="fire-button" (touchstart)="handleStartAutoFire()"
+            (touchend)="knGameService.stopAutoFire()"></button>
+    </div>
+    <div class="kitchen-counter counter-left">
+        <button *ngIf="isMobile" [disabled]="paused" class="arrow-button left" (touchstart)="startMoving('left')"
+            (touchend)="stopMoving()">
+            <i class="bi bi-arrow-left-circle-fill"></i>
+        </button>
+    </div>
+    <div class="kitchen-counter counter-right">
+        <button *ngIf="isMobile" [disabled]="paused" class="arrow-button right" (touchstart)="startMoving('right')"
+            (touchend)="stopMoving()">
+            <i class="bi bi-arrow-right-circle-fill"></i>
+        </button>
+    </div>
 
     <!-- Enemies -->
     <ng-container *ngFor="let enemy of knGameService.enemies">
@@ -43,22 +56,22 @@
     </ng-container>
 
     <!-- Mobile Controls -->
-    <div *ngIf="isMobile" class="mobile-controls">
-        <!-- Left Arrow -->
-        <button [disabled]="paused" class="arrow-button left" (touchstart)="startMoving('left')"
+    <!-- <div *ngIf="isMobile" class="mobile-controls"> -->
+    <!-- Left Arrow -->
+    <!-- <button [disabled]="paused" class="arrow-button left" (touchstart)="startMoving('left')"
             (touchend)="stopMoving()">
             <i class="bi bi-arrow-left-circle-fill"></i>
-        </button>
+        </button> -->
 
-        <!-- Fire Button -->
-        <button [disabled]="paused" class="fire-button" (touchstart)="handleStartAutoFire()"
-            (touchend)="knGameService.stopAutoFire()"></button>
+    <!-- Fire Button -->
+    <!-- <button [disabled]="paused" class="fire-button" (touchstart)="handleStartAutoFire()"
+            (touchend)="knGameService.stopAutoFire()"></button> -->
 
-        <!-- Right Arrow -->
-        <button [disabled]="paused" class="arrow-button right" (touchstart)="startMoving('right')"
+    <!-- Right Arrow -->
+    <!-- <button [disabled]="paused" class="arrow-button right" (touchstart)="startMoving('right')"
             (touchend)="stopMoving()">
             <i class="bi bi-arrow-right-circle-fill"></i>
-        </button>
-    </div>
+        </button> -->
+    <!-- </div> -->
 
 </div>

@@ -184,8 +184,11 @@ nav.digipet i:not(.navBtnInBar i) {
 }
 
 @media (max-width: 900px) {
+    .sidebar {
+        width: 250px;
+    }
+
     .sidebar.default {
-        width: 230px;
         background-color: #1a1a1d !important;
     }
 
