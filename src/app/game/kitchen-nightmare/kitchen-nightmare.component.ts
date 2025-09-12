@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { KnGameService } from './services/knGame.service';
 import { ScoringService } from './services/scoring.service';
+import Swal from 'sweetalert2';
 
 @Component({
   standalone: true,
@@ -119,14 +120,37 @@ export class KitchenNightmareComponent implements OnInit {
   }
 
   gameLoop(timestamp?: number) {
-    if (!this.paused) {
+    if (!this.paused && !this.knGameService.gameOver) {
       this.knGameService.moveBullets();
       this.knGameService.checkCollisions();
       this.knGameService.moveEnemies(timestamp || performance.now());
       this.knGameService.cleanupExplosions(timestamp || performance.now());
     }
 
-    requestAnimationFrame((ts) => this.gameLoop(ts));
+    if (this.knGameService.gameOver) {
+      this.paused = true;
 
+      Swal.fire({
+        title: this.knGameService.gameWon ? 'You Win!' : 'Game Over!',
+        text: this.knGameService.gameWon
+          ? 'All enemies have been defeated!'
+          : 'Enemies reached your counter!',
+        confirmButtonText: 'Play Again',
+        customClass: {
+          popup: 'kitchen-alert',
+          confirmButton: 'kitchen-button'
+        },
+        allowOutsideClick: false
+      }).then(() => {
+        this.knGameService.resetGame();
+        this.paused = false;
+        this.gameLoop(); // Restart
+      });
+
+      return;
+    }
+
+    requestAnimationFrame((ts) => this.gameLoop(ts));
   }
+
 }

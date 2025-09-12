@@ -14,6 +14,9 @@ export class KnGameService {
   gameWidth = window.innerWidth;
   gameHeight = window.innerHeight;
 
+  public gameOver = false;
+  public gameWon = false;
+
   bullets: Bullet[] = [];
   fireCooldown = false;
   private autoFireInterval: any = null;
@@ -55,6 +58,8 @@ export class KnGameService {
   }
 
   resetGame(): void {
+    this.gameWon = false;
+    this.gameOver = false;
     this.playerService.resetPlayer();
     this.enemies = this.enemyService.spawnEnemies(this.gameWidth);
     this.shields = this.shieldService.createShields(this.gameWidth);
@@ -104,6 +109,8 @@ export class KnGameService {
   }
 
   checkCollisions(): void {
+    if (this.gameOver) return;
+
     this.bullets.forEach(bullet => {
       console.log("bullet fired");
       // Check shield collisions
@@ -133,6 +140,14 @@ export class KnGameService {
         }
       });
     });
+
+    const remainingEnemies = this.enemies.filter(e => e.active);
+    if (remainingEnemies.length === 0) {
+      this.gameOver = true;
+      this.gameWon = true;
+      console.warn("YOU WIN! All enemies defeated.");
+    }
+
   }
 
 
@@ -146,17 +161,16 @@ export class KnGameService {
   private readonly enemyWidth = 40;
 
   moveEnemies(timestamp: number): void {
+    if (this.gameOver) return; // Don't move if game over
     if (!this.lastDropTime) this.lastDropTime = timestamp;
 
     if (timestamp - this.lastDropTime > this.dropInterval) {
-      const dx = 6; // horizontal step
-      const dy = 7; // vertical step
+      const dx = 6;
+      const dy = 7;
 
       const activeEnemies = this.enemies.filter(e => e.active);
-
       const rows = new Map<number, Enemy[]>();
 
-      // Group enemies by row
       activeEnemies.forEach(enemy => {
         const row = enemy.row ?? 0;
         if (!rows.has(row)) rows.set(row, []);
@@ -166,7 +180,6 @@ export class KnGameService {
       rows.forEach((enemiesInRow, row) => {
         const direction = this.rowDirections[row] ?? 1;
 
-        // Find leftmost and rightmost enemies in this row - dont let them out lol
         const leftmostX = Math.min(...enemiesInRow.map(e => e.x));
         const rightmostX = Math.max(...enemiesInRow.map(e => e.x));
 
@@ -174,17 +187,18 @@ export class KnGameService {
         const hitRightBoundary = rightmostX >= this.gameWidth - this.margin - this.enemyWidth - 10;
 
         if ((direction === -1 && hitLeftBoundary) || (direction === 1 && hitRightBoundary)) {
-          // Reverse and drop down - zigzag style
           this.rowDirections[row] = -direction;
+
           enemiesInRow.forEach(enemy => {
             if (enemy.y + dy >= this.maxEnemyY) {
-              enemy.y = enemy.y;
+              this.gameOver = true;
+              this.gameWon = false;
+              console.warn("GAME OVER: Enemies reached the bottom!");
             } else {
               enemy.y += dy;
             }
           });
         } else {
-          // Move horizontally
           enemiesInRow.forEach(enemy => enemy.x += dx * direction);
         }
       });
@@ -192,7 +206,6 @@ export class KnGameService {
       this.lastDropTime = timestamp;
     }
   }
-
 
   // private enemyDirection = 1; // 1: right, -1: left
 
